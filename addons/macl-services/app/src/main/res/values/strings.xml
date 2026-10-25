@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MACL Services</string>
+    <string name="tab_fis">Flight Info (FIS)</string>
+    <string name="tab_bus">Bus Schedule</string>
+    <string name="tab_prayer">Prayer Times</string>
+    
+    <string name="via_title">Velana International Airport (MLE)</string>
+    <string name="departures">Departures</string>
+    <string name="arrivals">Arrivals</string>
+    
+    <string name="status_on_time">On Time</string>
+    <string name="status_boarding">Boarding</string>
+    <string name="status_departed">Departed</string>
+    <string name="status_delayed">Delayed</string>
+    <string name="status_landed">Landed</string>
+</resources>

@@ -14,7 +14,10 @@ An ultra-premium, lightweight, tvOS-inspired Android TV launcher built specifica
   - Frosted glass cards with smooth `1.05x` focus elevation animations and glowing turquoise focus rings (`#00B2E3`).
   - Floating bottom dock with frosted glass styling and squircle application tiles.
   - Top header with greeting, large clock, and clean round icon controls for Inputs, Wi-Fi, and Settings.
-- **Integrated Theme System**:
+- **Included Add-ons ([addons/](addons/))**:
+  - **`macl-services` (`com.macl.services`)**: Interactive Flight Information Display System (native board and web view), prayer times with adhan timings, and bus schedule explorer.
+  - **`tv-agent` (`com.macl.tvagent`)**: AI TV voice & remote assistant for quick TV control and airport queries.
+- **Integrated Theme System ([themes/](themes/))**:
   - Support for multiple airport color schemes (`macl-default`, `macl-midnight`, `macl-lagoon`, `macl-sunrise`).
   - Seamless theme pushing and switching on the fly over ADB.
 - **Performance & Privacy**:
@@ -28,10 +31,12 @@ An ultra-premium, lightweight, tvOS-inspired Android TV launcher built specifica
 
 ```
 macl-tv-launcher/
+├── setup.sh              # 1-Click interactive setup & launcher replacement installer
+├── restore.sh            # 1-Click stock launcher restore utility
 ├── app/                  # Main Android TV Launcher app (com.macl.tvlauncher)
-│   ├── src/main/
-│   │   ├── java/         # Launcher core, widgets, and dynamic theming
-│   │   └── res/          # Layouts, vector assets, and configurations
+├── addons/               # Companion TV Add-on apps
+│   ├── macl-services/    # Flight board (FIS), Prayer times, and Bus schedules
+│   └── tv-agent/         # AI voice & remote assistant
 ├── themes/               # Pre-configured visual themes
 │   ├── macl-default/     # Classic MACL Evening with airport apron backdrop
 │   ├── macl-midnight/    # Pure OLED deep black with neon cyan glow
@@ -45,31 +50,57 @@ macl-tv-launcher/
 
 ---
 
-## Quick Start
+## 🚀 One-Command TV Setup (Replace Any TV Launcher)
 
-### Prerequisites
-- JDK 17
-- Android SDK (platform 34, build-tools 34.0.0)
-- Smart TV connected via ADB (Wi-Fi, Ethernet, or Tailscale)
+Any user can connect to their TV over ADB (Wi-Fi, Ethernet, or Tailscale) and completely replace the stock launcher with MACL Launcher and its companion services:
 
-### 1. Build Release APK
 ```bash
-./scripts/build.sh
+# Clone the repository
+git clone https://github.com/anax/macl-tv-launcher.git
+cd macl-tv-launcher
+
+# Run the automated installer (replace with your TV IP or Tailscale IP)
+TV_HOST=100.83.39.24 ./setup.sh
 ```
 
-### 2. Deploy to TV
-```bash
-# Set your TV IP and install
-TV_HOST=100.83.39.24 ./scripts/install.sh
-```
+The installer will automatically:
+1. Connect to the TV over ADB.
+2. Detect the TV model and back up the current stock launcher.
+3. Build and install **MACL TV Launcher** (`com.macl.tvlauncher`).
+4. Build and install **MACL Services** (`com.macl.services`).
+5. Build and install **TV Agent** (`com.macl.tvagent`).
+6. Push the default frosted glass airport theme.
+7. Set MACL Launcher as the default Home screen (with optional stock launcher debloat).
+8. Launch the fresh living room experience immediately!
 
-### 3. Switch Themes
+---
+
+## 🎨 Switching Themes
+
+Switch between themes on the fly without reinstalling:
+
 ```bash
-# Apply OLED Midnight theme
+# OLED Midnight (pure black with glowing neon cyan)
 TV_HOST=100.83.39.24 ./scripts/switch-theme.sh themes/macl-midnight
 
-# Switch back to Classic Evening theme
+# Tropical Lagoon (Velana turquoise and runway gold)
+TV_HOST=100.83.39.24 ./scripts/switch-theme.sh themes/macl-lagoon
+
+# Maldives Sunrise (coral dawn glow)
+TV_HOST=100.83.39.24 ./scripts/switch-theme.sh themes/macl-sunrise
+
+# Classic Evening Apron
 TV_HOST=100.83.39.24 ./scripts/switch-theme.sh themes/macl-default
+```
+
+---
+
+## 🔄 Restoring Stock Launcher
+
+If you ever wish to revert back to your TV's original stock launcher:
+
+```bash
+TV_HOST=100.83.39.24 ./restore.sh
 ```
 
 ---

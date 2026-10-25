@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Clean Your TV module card (docs/specs/card.md): literal values, no @string references. -->
+<card spec="1" label="Agent" caption="Multi-step tasks" accent="#7C5CFF" />

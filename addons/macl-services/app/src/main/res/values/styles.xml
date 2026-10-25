@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MACL" parent="android:Theme.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@color/macl_dark_blue</item>
+        <item name="android:colorBackground">@color/macl_dark_blue</item>
+    </style>
+</resources>

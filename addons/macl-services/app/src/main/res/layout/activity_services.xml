@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/macl_dark_blue"
+    android:paddingStart="44dp"
+    android:paddingEnd="44dp"
+    android:paddingTop="28dp"
+    android:paddingBottom="20dp">
+
+    <!-- Header matching fis.com.mv -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FIS"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="26sp"
+                    android:fontFamily="sans-serif-black"
+                    android:letterSpacing="0.05" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="•   Velana International Airport (MLE)"
+                    android:textColor="@color/macl_turquoise"
+                    android:textSize="14sp"
+                    android:letterSpacing="0.05" />
+
+                <TextView
+                    android:id="@+id/tvFisLastUpdated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:background="@drawable/badge_bg"
+                    android:text="Live fis.com.mv"
+                    android:textColor="@color/macl_yellow"
+                    android:textSize="11sp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/headerSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Maldives Airports Company Limited • Flight Information Display System"
+                android:textColor="@color/macl_text_dim"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="end"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true">
+
+            <TextClock
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:format24Hour="HH:mm"
+                android:format12Hour="hh:mm a"
+                android:textColor="@color/macl_text_primary"
+                android:textSize="26sp"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextClock
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:format24Hour="EEEE, d MMMM yyyy"
+                android:format12Hour="EEEE, d MMMM yyyy"
+                android:textColor="@color/macl_text_dim"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Navigation Tabs -->
+    <LinearLayout
+        android:id="@+id/tabBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="18dp">
+
+        <TextView
+            android:id="@+id/tabFis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tab_bg"
+            android:text="Flight Info (FIS)"
+            android:textColor="@color/macl_text_primary"
+            android:textSize="14sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:clickable="true" />
+
+        <TextView
+            android:id="@+id/tabFisWeb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tab_bg"
+            android:text="fis.com.mv Web"
+            android:textColor="@color/macl_text_primary"
+            android:textSize="14sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:clickable="true" />
+
+        <TextView
+            android:id="@+id/tabBus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tab_bg"
+            android:text="Bus Schedule"
+            android:textColor="@color/macl_text_primary"
+            android:textSize="14sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:clickable="true" />
+
+        <TextView
+            android:id="@+id/tabPrayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tab_bg"
+            android:text="Prayer Times"
+            android:textColor="@color/macl_text_primary"
+            android:textSize="14sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:focusable="true"
+            android:clickable="true" />
+    </LinearLayout>
+
+    <!-- Content Sections -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- FIS Content matching fis.com.mv -->
+        <LinearLayout
+            android:id="@+id/contentFis"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <!-- Sub-filters: Departures / Arrivals + International / Domestic -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
+
+                <!-- Departures / Arrivals toggle -->
+                <TextView
+                    android:id="@+id/btnDepartures"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Departures"
+                    android:textColor="@color/macl_text_primary"
+                    android:textSize="13sp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:background="@drawable/tab_bg"
+                    android:layout_marginEnd="8dp"
+                    android:focusable="true" />
+
+                <TextView
+                    android:id="@+id/btnArrivals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Arrivals"
+                    android:textColor="@color/macl_text_primary"
+                    android:textSize="13sp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:background="@drawable/tab_bg"
+                    android:layout_marginEnd="20dp"
+                    android:focusable="true" />
+
+                <!-- Category Filters: All / International / Domestic -->
+                <TextView
+                    android:id="@+id/btnFilterAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="All"
+                    android:textColor="@color/macl_text_primary"
+                    android:textSize="12sp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/tab_bg"
+                    android:layout_marginEnd="6dp"
+                    android:focusable="true" />
+
+                <TextView
+                    android:id="@+id/btnFilterIntl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="International"
+                    android:textColor="@color/macl_text_primary"
+                    android:textSize="12sp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/tab_bg"
+                    android:layout_marginEnd="6dp"
+                    android:focusable="true" />
+
+                <TextView
+                    android:id="@+id/btnFilterDom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Domestic"
+                    android:textColor="@color/macl_text_primary"
+                    android:textSize="12sp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/tab_bg"
+                    android:focusable="true" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <!-- Refresh button -->
+                <TextView
+                    android:id="@+id/btnRefreshFis"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="↻ Refresh"
+                    android:textColor="@color/macl_turquoise"
+                    android:textSize="12sp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/tab_bg"
+                    android:focusable="true" />
+            </LinearLayout>
+
+            <!-- Table Header matching fis.com.mv exactly -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp">
+
+                <TextView
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:text="SCHEDULED / EST"
+                    android:textColor="@color/macl_turquoise"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="FLIGHT &amp; AIRLINE"
+                    android:textColor="@color/macl_turquoise"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:id="@+id/colDestOrigin"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="ROUTING"
+                    android:textColor="@color/macl_turquoise"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:id="@+id/colGateBelt"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="TERMINAL &amp; GATE"
+                    android:textColor="@color/macl_turquoise"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:text="STATUS"
+                    android:textColor="@color/macl_turquoise"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="end" />
+            </LinearLayout>
+
+            <!-- Flight Rows Container -->
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/flightListContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
+        </LinearLayout>
+
+        <!-- Web View Content loading fis.com.mv -->
+        <FrameLayout
+            android:id="@+id/contentFisWeb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <WebView
+                android:id="@+id/webViewFis"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="true" />
+        </FrameLayout>
+
+        <!-- Bus Schedule Content -->
+        <LinearLayout
+            android:id="@+id/contentBus"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RTL Airport Express &amp; Shuttle Network (24/7)"
+                android:textColor="@color/macl_text_secondary"
+                android:textSize="14sp"
+                android:layout_marginBottom="16dp" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/busListContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
+        </LinearLayout>
+
+        <!-- Prayer Times Content -->
+        <LinearLayout
+            android:id="@+id/contentPrayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/card_bg"
+                android:padding="20dp"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/prayerNextLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="NEXT PRAYER"
+                        android:textColor="@color/macl_yellow"
+                        android:textSize="13sp"
+                        android:letterSpacing="0.1" />
+
+                    <TextView
+                        android:id="@+id/prayerNextName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Isha"
+                        android:textColor="@color/macl_text_primary"
+                        android:textSize="36sp"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/prayerCountdown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="in 25 minutes"
+                        android:textColor="@color/macl_turquoise"
+                        android:textSize="28sp" />
+
+                    <TextView
+                        android:id="@+id/prayerHijriDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Male' &amp; Hulhule (UTC+5)"
+                        android:textColor="@color/macl_text_dim"
+                        android:textSize="13sp"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/prayerCardsRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

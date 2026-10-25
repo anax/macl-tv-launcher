@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Agent</string>
+
+    <string name="title">Agent</string>
+    <string name="status_key_set">%1$s · ready</string>
+    <string name="status_no_key">%1$s · no key</string>
+    <string name="status_working">Working…</string>
+
+    <string name="input_hint">Ask for a task…</string>
+    <string name="send">Ask</string>
+    <string name="voice">Phone voice</string>
+    <string name="settings">Settings</string>
+    <string name="examples">Try: movie night · open YouTube and search for trains · turn it down · what is on at 9?</string>
+
+    <string name="welcome_title">What should the TV do?</string>
+    <string name="welcome_body">Ask in your own words. It plans the steps, opens the apps, sets the volume and tells you what it did. Use Phone voice to speak instead of typing on the remote.</string>
+    <string name="key_missing">No model key yet. Open Phone voice and add one on your phone, or use Settings.</string>
+    <string name="busy">Still working on the last task…</string>
+    <string name="error">Error: %1$s</string>
+    <string name="wrong_code">Wrong pairing code on the phone page.</string>
+
+    <string name="phone_title">Talk from your phone</string>
+    <string name="phone_where">Same Wi-Fi as the TV. Open this in Chrome on your phone:</string>
+    <string name="phone_code_label">Pairing code</string>
+    <string name="phone_help">Type the code once. Then tap the mic key on your phone\'s keyboard, speak, and press Send. The answer shows here and on the TV.</string>
+    <string name="phone_close">Done</string>
+    <string name="float_orb">Float over TV</string>
+    <string name="float_hint">Keeps this page working while you watch something else.</string>
+    <string name="float_started">Floating. Use your phone; open another app if you like.</string>
+    <string name="orb_permission">Allow Agent to display over other apps, then tap Float over TV again.</string>
+    <string name="orb_error">Floating orb: %1$s</string>
+    <string name="orb_description">Agent</string>
+    <string name="orb_channel">Floating agent</string>
+    <string name="orb_notification_title">Agent is floating</string>
+    <string name="orb_notification_text">Tap the circle or use your phone page</string>
+    <string name="orb_stop">Hide</string>
+    <string name="phone_no_wifi">Connect the TV to Wi-Fi first, then open this again.</string>
+    <string name="phone_closed">Phone voice closed after 10 wrong codes.</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_provider">Model provider</string>
+    <string name="settings_key">Gemini API key</string>
+    <string name="settings_key_hint">Paste a key from aistudio.google.com</string>
+    <string name="settings_model">Gemini model</string>
+    <string name="settings_cf_account">Cloudflare account ID</string>
+    <string name="settings_cf_account_hint">From the Workers AI dashboard</string>
+    <string name="settings_cf_token">Cloudflare API token</string>
+    <string name="settings_cf_token_hint">Paste a token with Workers AI access</string>
+    <string name="settings_cf_token_set">Token saved — leave empty to keep it</string>
+    <string name="settings_cf_model">Cloudflare model</string>
+    <string name="settings_cf_model_hint">@cf/zai-org/glm-4.7-flash</string>
+    <string name="settings_speak">Read answers aloud</string>
+    <string name="settings_save">Save</string>
+    <string name="settings_cancel">Cancel</string>
+    <string name="settings_saved">Saved</string>
+
+</resources>

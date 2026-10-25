@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="providers">
+        <item>Gemini</item>
+        <item>Cloudflare Workers AI</item>
+    </string-array>
+    <string-array name="provider_values" translatable="false">
+        <item>gemini</item>
+        <item>cloudflare</item>
+    </string-array>
+</resources>
