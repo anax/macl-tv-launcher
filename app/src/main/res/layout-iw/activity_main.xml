@@ -4,18 +4,14 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF000000">
+    android:background="#FF0C184A">
 
-    <!-- Time-of-day backdrop, drawn once a minute (config.xml sky_intensity; 0 keeps it hidden).
-         Keep in step with layout/activity_main.xml: every view there must exist here too. -->
     <com.macl.tvlauncher.SkyView
         android:id="@+id/sky"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:importantForAccessibility="no" />
 
-    <!-- Cinematic top shelf (cinematic_home): the focused dock app's artwork, a few pixels across and
-         stretched over the screen, which softens it like a blur without the cost of one. Hidden otherwise. -->
     <ImageView
         android:id="@+id/heroArt"
         android:layout_width="match_parent"
@@ -25,77 +21,23 @@
         android:visibility="gone"
         android:importantForAccessibility="no" />
 
-    <!-- Ambient glow in the colour of the focused dock app. -->
     <View
         android:id="@+id/ambient"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0" />
 
-    <!-- Race-weekend panel (a theme's race_calendar, see RaceWeekend), mirrored: under the clock on the right. -->
     <LinearLayout
         android:id="@+id/racePanel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|right"
-        android:layout_marginEnd="60dp"
-        android:layout_marginTop="158dp"
-        android:gravity="right"
-        android:orientation="vertical"
-        android:focusable="false"
-        android:importantForAccessibility="no"
         android:visibility="gone">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/raceKicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:textColor="#B3FFFFFF"
-                android:textSize="12sp"
-                android:fontFamily="@string/font_medium"
-                android:letterSpacing="0.22"
-                android:textAllCaps="true" />
-
-            <View
-                android:layout_width="3dp"
-                android:layout_height="13dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/race_bar" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/raceHeadline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:singleLine="true"
-            android:textColor="#FFFFFFFF"
-            android:textSize="34sp"
-            android:fontFamily="@string/font_light"
-            android:letterSpacing="-0.01"
-            android:includeFontPadding="false" />
-
-        <TextView
-            android:id="@+id/raceSessions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:singleLine="true"
-            android:textColor="#99FFFFFF"
-            android:textSize="12sp"
-            android:fontFamily="@string/font_medium"
-            android:letterSpacing="0.12" />
+        <TextView android:id="@+id/raceKicker" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <TextView android:id="@+id/raceHeadline" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <TextView android:id="@+id/raceSessions" android:layout_width="wrap_content" android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <!-- Cinematic top shelf: darkens the edge behind the shelf and the lower half, so the text and the
-         dock stay readable over the artwork. -->
     <View
         android:id="@+id/heroScrim"
         android:layout_width="match_parent"
@@ -103,405 +45,120 @@
         android:visibility="gone"
         android:importantForAccessibility="no" />
 
-    <!-- Top shelf: the focused dock app's name, positioned above the dock in code. -->
     <LinearLayout
         android:id="@+id/hero"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="68dp"
-        android:layout_gravity="right"
-        android:gravity="right"
-        android:orientation="vertical"
-        android:alpha="0">
+        android:visibility="gone">
 
-        <TextView
-            android:id="@+id/heroName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:gravity="right"
-            android:textColor="#FFFFFFFF"
-            android:textSize="48sp"
-            android:fontFamily="@string/font_light"
-            android:letterSpacing="-0.02"
-            android:includeFontPadding="false"
-            android:singleLine="true" />
-
-        <!-- Cinematic shelf only: when the app was last opened, and the dock position dots. -->
-        <TextView
-            android:id="@+id/heroMeta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginEnd="4dp"
-            android:layout_marginTop="12dp"
-            android:singleLine="true"
-            android:textColor="#B3FFFFFF"
-            android:textSize="15sp"
-            android:fontFamily="@string/font_light"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/heroDots"
-            android:layout_width="wrap_content"
-            android:layout_height="6dp"
-            android:layout_gravity="right"
-            android:layout_marginEnd="4dp"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:visibility="gone" />
+        <TextView android:id="@+id/heroName" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <TextView android:id="@+id/heroMeta" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <LinearLayout android:id="@+id/heroDots" android:layout_width="wrap_content" android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingStart="56dp"
-        android:paddingEnd="56dp"
-        android:paddingTop="26dp"
+        android:paddingStart="48dp"
+        android:paddingEnd="48dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="24dp"
         android:clipChildren="false"
         android:clipToPadding="false">
 
-        <!-- No clipping down to the pills: with advanced effects a focused pill scales up past its row. -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipChildren="false"
             android:clipToPadding="false">
 
-            <LinearLayout
-                android:id="@+id/leftBlock"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_toEndOf="@+id/topButtons"
-                android:layout_marginStart="16dp"
-                android:orientation="horizontal"
-                android:gravity="right|bottom">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="9dp"
-                    android:orientation="vertical">
-
-                    <!-- Shamsi date ("27 Mehr 1405"), shown when shamsi_date is on. -->
-                    <TextView
-                        android:id="@+id/shamsiDate"
-                        android:gravity="right"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:textColor="#E6FFFFFF"
-                        android:textSize="17sp"
-                        android:fontFamily="@string/font_regular"
-                        android:letterSpacing="0.02"
-                        android:includeFontPadding="false"
-                        android:visibility="gone" />
-
-                    <TextClock
-                        android:id="@+id/date"
-                        android:gravity="right"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:format12Hour="@string/date_format"
-                        android:format24Hour="@string/date_format"
-                        android:textColor="#A6FFFFFF"
-                        android:textSize="14sp"
-                        android:fontFamily="@string/font_regular"
-                        android:letterSpacing="0.14"
-                        android:textAllCaps="true" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="26dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="#33FFFFFF" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/greeting"
-                        android:gravity="center_horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:textColor="#8CFFFFFF"
-                        android:textSize="12sp"
-                        android:fontFamily="@string/font_medium"
-                        android:letterSpacing="0.22"
-                        android:textAllCaps="true" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:baselineAligned="true">
-                        <TextClock
-                            android:id="@+id/ampm"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="6dp"
-                            android:singleLine="true"
-                            android:textDirection="rtl"
-                            android:layout_gravity="bottom"
-                            android:layout_marginBottom="8dp"
-                            android:format12Hour="a"
-                            android:format24Hour=""
-                            android:textColor="#B3FFFFFF"
-                            android:textSize="15sp"
-                            android:fontFamily="@string/font_medium"
-                            android:letterSpacing="0"
-                            android:ellipsize="none"
-                            android:textAllCaps="true" />
-
-                        <TextClock
-                            android:id="@+id/clock"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="6dp"
-                            android:format12Hour="h:mm"
-                            android:format24Hour="HH:mm"
-                            android:textColor="#FFFFFFFF"
-                            android:textSize="52sp"
-                            android:fontFamily="@string/font_light"
-                            android:letterSpacing="-0.04"
-                            android:includeFontPadding="false" />
-                    </LinearLayout>
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- Shown only when show_stats is on. Outside leftBlock, so the top buttons stay level with the clock
-                 row; gone, it takes no space. -->
             <TextView
                 android:id="@+id/stats"
                 android:layout_width="wrap_content"
-                android:layout_below="@id/leftBlock"
-                android:layout_alignStart="@id/leftBlock"
-                android:layout_alignEnd="@id/leftBlock"
-                android:gravity="right"
-                android:textDirection="rtl"
-                android:layout_marginEnd="6dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:singleLine="true"
-                android:ellipsize="end"
-                android:textColor="#D9FFFFFF"
-                android:textSize="14sp"
-                android:fontFamily="@string/font_medium"
-                android:letterSpacing="0.04"
-                android:focusable="false"
                 android:visibility="gone" />
 
-            <!-- MACL Living Room Interactive Widgets (Wide FIS Card + Prayer Card + Bus Card) -->
             <LinearLayout
-                android:id="@+id/maclWidgetBar"
-                android:layout_width="match_parent"
+                android:id="@+id/leftBlock"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/leftBlock"
-                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
                 android:gravity="center_horizontal"
-                android:orientation="horizontal"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:visibility="gone">
+                android:orientation="vertical">
 
-                <!-- 1. Wide Card: Live FIS Flight Board Card (360dp x 165dp) -->
+                <TextView
+                    android:id="@+id/greeting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="VELANA INTERNATIONAL AIRPORT"
+                    android:textColor="#99FFFFFF"
+                    android:textSize="11sp"
+                    android:fontFamily="@string/font_medium"
+                    android:letterSpacing="0.22"
+                    android:textAllCaps="true" />
+
+                <TextClock
+                    android:id="@+id/clock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:format12Hour="h:mm"
+                    android:format24Hour="HH:mm"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="78sp"
+                    android:fontFamily="@string/font_medium"
+                    android:letterSpacing="-0.03"
+                    android:includeFontPadding="false" />
+
                 <LinearLayout
-                    android:id="@+id/cardWidgetFis"
-                    android:layout_width="360dp"
-                    android:layout_height="165dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/card_widget_bg"
-                    android:clipChildren="false"
-                    android:clipToPadding="false"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:padding="18dp"
-                    android:nextFocusRight="@+id/cardWidgetPrayer"
-                    android:nextFocusDown="@+id/grid">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="LIVE FLIGHTS (MLE)"
-                            android:textColor="#FF00B2E3"
-                            android:textSize="11sp"
-                            android:fontFamily="@string/font_medium"
-                            android:letterSpacing="0.1" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/tvWidgetFisStatus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="On Time"
-                            android:textColor="#FF10B981"
-                            android:textSize="11sp"
-                            android:fontFamily="@string/font_medium" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tvWidgetFisFlight"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:text="SQ 437 • Singapore Airlines"
-                        android:textColor="#FFFFC629"
-                        android:textSize="20sp"
-                        android:fontFamily="@string/font_medium" />
-
-                    <TextView
-                        android:id="@+id/tvWidgetFisRoute"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:text="Singapore (SIN) • Scheduled 23:30 • Gate 4"
-                        android:textColor="#CCFFFFFF"
-                        android:textSize="13sp" />
-
-                    <TextView
+                    <TextClock
+                        android:id="@+id/date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="fis.com.mv • Tap to open board"
-                        android:textColor="#80FFFFFF"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <!-- 2. Square Card: Prayer Times Card (170dp x 165dp) -->
-                <LinearLayout
-                    android:id="@+id/cardWidgetPrayer"
-                    android:layout_width="170dp"
-                    android:layout_height="165dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/card_widget_bg"
-                    android:clipChildren="false"
-                    android:clipToPadding="false"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:padding="18dp"
-                    android:nextFocusLeft="@+id/cardWidgetFis"
-                    android:nextFocusRight="@+id/cardWidgetBus"
-                    android:nextFocusDown="@+id/grid">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="PRAYER TIMES"
-                        android:textColor="#FF00B2E3"
-                        android:textSize="11sp"
-                        android:fontFamily="@string/font_medium"
-                        android:letterSpacing="0.1" />
-
-                    <TextView
-                        android:id="@+id/tvWidgetPrayerName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Isha"
-                        android:textColor="#FFFFFFFF"
-                        android:textSize="26sp"
-                        android:fontFamily="@string/font_medium" />
-
-                    <TextView
-                        android:id="@+id/tvWidgetPrayerCountdown"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="in 18 mins"
-                        android:textColor="#FFFFC629"
-                        android:textSize="13sp"
-                        android:fontFamily="@string/font_medium" />
-
-                    <TextView
-                        android:id="@+id/tvWidgetPrayerTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="19:03 • Malé (UTC+5)"
-                        android:textColor="#80FFFFFF"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <!-- 3. Square Card: RTL Airport Bus & Transit (170dp x 165dp) -->
-                <LinearLayout
-                    android:id="@+id/cardWidgetBus"
-                    android:layout_width="170dp"
-                    android:layout_height="165dp"
-                    android:background="@drawable/card_widget_bg"
-                    android:clipChildren="false"
-                    android:clipToPadding="false"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:orientation="vertical"
-                    android:padding="18dp"
-                    android:nextFocusLeft="@+id/cardWidgetPrayer"
-                    android:nextFocusDown="@+id/grid">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="AIRPORT BUS"
-                        android:textColor="#FF00B2E3"
-                        android:textSize="11sp"
-                        android:fontFamily="@string/font_medium"
-                        android:letterSpacing="0.1" />
-
-                    <TextView
-                        android:id="@+id/tvWidgetBusRoute1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Hulhumalé 4m"
-                        android:textColor="#FFFFFFFF"
+                        android:format12Hour="@string/date_format_home"
+                        android:format24Hour="@string/date_format_home"
+                        android:textColor="#E6FFFFFF"
                         android:textSize="15sp"
-                        android:fontFamily="@string/font_medium" />
-
-                    <TextView
-                        android:id="@+id/tvWidgetBusRoute2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Malé City 4m"
-                        android:textColor="#CCFFFFFF"
-                        android:textSize="13sp" />
+                        android:fontFamily="@string/font_regular"
+                        android:letterSpacing="0.04" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="24/7 RTL Express"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="•"
                         android:textColor="#80FFFFFF"
-                        android:textSize="11sp" />
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvWeatherSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="⛅ 31°C · MLE"
+                        android:textColor="#CCFFFFFF"
+                        android:textSize="15sp"
+                        android:fontFamily="@string/font_regular" />
+
+                    <TextClock
+                        android:id="@+id/ampm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/shamsiDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -510,8 +167,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_alignBottom="@id/leftBlock"
-                android:layout_marginBottom="6dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="4dp"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:orientation="horizontal">
@@ -521,7 +178,15 @@
                     style="@style/TopButton"
                     android:text="@string/settings"
                     android:drawableStart="@drawable/ic_settings"
-                    android:nextFocusDown="@+id/grid" />
+                    android:nextFocusDown="@+id/cardWidgetAppsFolder" />
+
+                <TextView
+                    android:id="@+id/btnReorder"
+                    style="@style/TopButtonIcon"
+                    android:visibility="gone"
+                    android:contentDescription="@string/reorder"
+                    android:drawableStart="@drawable/ic_swap_vert"
+                    android:nextFocusDown="@+id/cardWidgetAppsFolder" />
 
                 <TextView
                     android:id="@+id/btnLibraryTop"
@@ -529,58 +194,437 @@
                     android:visibility="gone"
                     android:contentDescription="@string/app_library"
                     android:drawableStart="@drawable/ic_apps"
-                    android:nextFocusDown="@+id/grid" />
-
-                <TextView
-                    android:id="@+id/btnReorder"
-                    style="@style/TopButtonIcon"
-                    android:contentDescription="@string/reorder"
-                    android:drawableStart="@drawable/ic_swap_vert"
-                    android:nextFocusDown="@+id/grid" />
+                    android:nextFocusDown="@+id/cardWidgetAppsFolder" />
 
                 <TextView
                     android:id="@+id/btnWifi"
                     style="@style/TopButton"
-                    android:maxWidth="180dp"
+                    android:maxWidth="170dp"
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:text="@string/wifi"
                     android:drawableStart="@drawable/ic_wifi"
-                    android:nextFocusDown="@+id/grid" />
+                    android:nextFocusDown="@+id/cardWidgetPrayer" />
 
                 <TextView
                     android:id="@+id/btnInputs"
                     style="@style/TopButton"
                     android:text="@string/inputs"
                     android:drawableStart="@drawable/ic_input"
-                    android:nextFocusDown="@+id/grid" />
+                    android:nextFocusDown="@+id/cardWidgetFis" />
             </LinearLayout>
         </RelativeLayout>
 
-        <!-- The wrapper clips at the grid's edge; the grid itself must not clip so scaled tiles can overflow their cells. -->
-        <FrameLayout
+        <!-- Middle Section -->
+        <LinearLayout
+            android:id="@+id/maclWidgetBar"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <LinearLayout
+                android:id="@+id/cardWidgetFis"
+                android:layout_width="370dp"
+                android:layout_height="175dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/card_widget_fis_bg"
+                android:focusable="true"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="18dp"
+                android:nextFocusUp="@+id/btnInputs"
+                android:nextFocusRight="@+id/cardWidgetPrayer"
+                android:nextFocusDown="@+id/dockItemTv">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LIVE FLIGHTS (MLE)"
+                        android:textColor="#FF00B2E3"
+                        android:textSize="11sp"
+                        android:fontFamily="@string/font_medium"
+                        android:letterSpacing="0.1" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/tvWidgetFisStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="On Time"
+                        android:textColor="#FF10B981"
+                        android:textSize="11sp"
+                        android:fontFamily="@string/font_medium" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvWidgetFisFlight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:text="SQ 437 • Singapore Airlines"
+                    android:textColor="#FFFFC629"
+                    android:textSize="20sp"
+                    android:fontFamily="@string/font_medium" />
+
+                <TextView
+                    android:id="@+id/tvWidgetFisRoute"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:text="Singapore (SIN) • Scheduled 23:30 • Gate 4"
+                    android:textColor="#CCFFFFFF"
+                    android:textSize="13sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="fis.com.mv • Tap to open board"
+                    android:textColor="#80FFFFFF"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cardWidgetPrayer"
+                android:layout_width="185dp"
+                android:layout_height="175dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/card_widget_bg"
+                android:focusable="true"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:nextFocusUp="@+id/btnWifi"
+                android:nextFocusLeft="@+id/cardWidgetFis"
+                android:nextFocusRight="@+id/cardWidgetAppsFolder"
+                android:nextFocusDown="@+id/dockItemMusic">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PRAYER TIMES"
+                    android:textColor="#FF00B2E3"
+                    android:textSize="11sp"
+                    android:fontFamily="@string/font_medium"
+                    android:letterSpacing="0.1" />
+
+                <TextView
+                    android:id="@+id/tvWidgetPrayerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Isha"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="24sp"
+                    android:fontFamily="@string/font_medium" />
+
+                <TextView
+                    android:id="@+id/tvWidgetPrayerCountdown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="in 18 mins"
+                    android:textColor="#FFFFC629"
+                    android:textSize="13sp"
+                    android:fontFamily="@string/font_medium" />
+
+                <TextView
+                    android:id="@+id/tvWidgetPrayerTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="19:03 • Malé (UTC+5)"
+                    android:textColor="#80FFFFFF"
+                    android:textSize="11sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/card_action_pill_bg"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Adhan Audio ▶"
+                        android:textColor="#E6FFFFFF"
+                        android:textSize="10sp"
+                        android:fontFamily="@string/font_medium" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cardWidgetAppsFolder"
+                android:layout_width="185dp"
+                android:layout_height="175dp"
+                android:background="@drawable/folder_widget_bg"
+                android:focusable="true"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="14dp"
+                android:gravity="center"
+                android:nextFocusUp="@+id/btnSettings"
+                android:nextFocusLeft="@+id/cardWidgetPrayer"
+                android:nextFocusDown="@+id/dockItemApps">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <View android:layout_width="38dp" android:layout_height="38dp" android:layout_margin="4dp" android:background="@drawable/mini_app_1" />
+                    <View android:layout_width="38dp" android:layout_height="38dp" android:layout_margin="4dp" android:background="@drawable/mini_app_2" />
+                    <View android:layout_width="38dp" android:layout_height="38dp" android:layout_margin="4dp" android:background="@drawable/mini_app_3" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <View android:layout_width="38dp" android:layout_height="38dp" android:layout_margin="4dp" android:background="@drawable/mini_app_4" />
+                    <View android:layout_width="38dp" android:layout_height="38dp" android:layout_margin="4dp" android:background="@drawable/mini_app_5" />
+                    <View android:layout_width="38dp" android:layout_height="38dp" android:layout_margin="4dp" android:background="@drawable/mini_app_6" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <View android:layout_width="38dp" android:layout_height="38dp" android:layout_margin="4dp" android:background="@drawable/mini_app_7" />
+                    <View android:layout_width="38dp" android:layout_height="38dp" android:layout_margin="4dp" android:background="@drawable/mini_app_8" />
+                    <View android:layout_width="38dp" android:layout_height="38dp" android:layout_margin="4dp" android:background="@drawable/mini_app_9" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cardWidgetBus"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone">
+
+                <TextView android:id="@+id/tvWidgetBusRoute1" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                <TextView android:id="@+id/tvWidgetBusRoute2" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Dock Section -->
+        <LinearLayout
+            android:id="@+id/dockCapsule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/dock_capsule_bg"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="9dp"
+            android:paddingBottom="9dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <FrameLayout
+                android:id="@+id/dockItemTv"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/dock_tile_tv"
+                android:focusable="true"
+                android:clickable="true"
+                android:nextFocusUp="@+id/cardWidgetFis"
+                android:nextFocusRight="@+id/dockItemVideo">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_livetv"
+                    android:contentDescription="Live TV" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/dockItemVideo"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/dock_tile_video"
+                android:focusable="true"
+                android:clickable="true"
+                android:nextFocusUp="@+id/cardWidgetFis"
+                android:nextFocusLeft="@+id/dockItemTv"
+                android:nextFocusRight="@+id/dockItemMusic">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_dock_play"
+                    android:contentDescription="Video" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/dockItemMusic"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/dock_tile_music"
+                android:focusable="true"
+                android:clickable="true"
+                android:nextFocusUp="@+id/cardWidgetPrayer"
+                android:nextFocusLeft="@+id/dockItemVideo"
+                android:nextFocusRight="@+id/dockItemGames">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_dock_music"
+                    android:contentDescription="Music" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/dockItemGames"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/dock_tile_games"
+                android:focusable="true"
+                android:clickable="true"
+                android:nextFocusUp="@+id/cardWidgetPrayer"
+                android:nextFocusLeft="@+id/dockItemMusic"
+                android:nextFocusRight="@+id/dockItemChat">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_dock_gamepad"
+                    android:contentDescription="Games" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/dockItemChat"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/dock_tile_chat"
+                android:focusable="true"
+                android:clickable="true"
+                android:nextFocusUp="@+id/cardWidgetPrayer"
+                android:nextFocusLeft="@+id/dockItemGames"
+                android:nextFocusRight="@+id/dockItemStore">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_dock_chat"
+                    android:contentDescription="Assistant" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/dockItemStore"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/dock_tile_store"
+                android:focusable="true"
+                android:clickable="true"
+                android:nextFocusUp="@+id/cardWidgetAppsFolder"
+                android:nextFocusLeft="@+id/dockItemChat"
+                android:nextFocusRight="@+id/dockItemApps">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_dock_store"
+                    android:contentDescription="Store" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/dockItemApps"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/dock_tile_apps"
+                android:focusable="true"
+                android:clickable="true"
+                android:nextFocusUp="@+id/cardWidgetAppsFolder"
+                android:nextFocusLeft="@+id/dockItemStore">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_dock_grid4"
+                    android:contentDescription="All Apps" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Hidden Grid FrameLayout -->
+        <FrameLayout
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="10dp">
+            android:visibility="gone">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/grid"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="10dp"
-                android:paddingBottom="40dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:clipToPadding="false"
-                android:clipChildren="false"
                 android:overScrollMode="never"
-                android:scrollbars="none"
                 android:descendantFocusability="afterDescendants" />
         </FrameLayout>
     </LinearLayout>
 
-    <!-- The single floating glass highlight that springs between tiles. -->
     <com.macl.tvlauncher.GlassView
         android:id="@+id/glass"
         android:layout_width="10dp"

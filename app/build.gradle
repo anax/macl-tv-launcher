@@ -25,7 +25,7 @@ android {
 
     packagingOptions {
         resources {
-            excludes += ['kotlin/**', 'META-INF/*.version', 'META-INF/*.kotlin_module', 'DebugProbesKt.bin']
+            excludes += ['kotlin/**', 'META-INF/*.version', 'META-INF/*.kotlin_module', 'DebugProbesKt.bin', 'META-INF/version-control-info.textproto', 'META-INF/**/*.properties']
         }
     }
 
