@@ -549,13 +549,19 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Flexible spacer pushing the dock to the bottom of the screen -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
         <!-- Bottom Section: Floating Frosted Pill Dock -->
         <LinearLayout
             android:id="@+id/dockCapsule"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="24dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/dock_capsule_bg"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
