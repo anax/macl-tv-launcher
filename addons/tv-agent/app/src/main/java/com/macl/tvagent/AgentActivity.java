@@ -103,6 +103,26 @@ public final class AgentActivity extends Activity implements VoiceServer.Bridge 
         updateStatus();
         welcome();
         send.requestFocus();
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (intent == null) return;
+        String prompt = intent.getStringExtra("prompt");
+        if (prompt == null || prompt.trim().isEmpty()) {
+            prompt = intent.getStringExtra("text");
+        }
+        if (prompt != null && !prompt.trim().isEmpty()) {
+            final String query = prompt.trim();
+            main.postDelayed(() -> startTask(query, null), 400);
+        }
     }
 
     @Override

@@ -98,6 +98,16 @@ public final class OrbService extends Service {
             return START_NOT_STICKY;
         }
         startInForeground();
+        if (intent != null) {
+            String prompt = intent.getStringExtra("prompt");
+            if (prompt == null || prompt.trim().isEmpty()) {
+                prompt = intent.getStringExtra("text");
+            }
+            if (prompt != null && !prompt.trim().isEmpty()) {
+                final String query = prompt.trim();
+                new Thread(() -> ask(query)).start();
+            }
+        }
         if (server != null) return START_NOT_STICKY;
 
         String code = intent == null ? null : intent.getStringExtra(EXTRA_CODE);
