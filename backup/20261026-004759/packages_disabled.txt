@@ -1,0 +1,17 @@
+package:android.autoinstalls.config.google.gtvpai
+package:com.google.android.apps.tv.launcherx
+package:com.google.android.tungsten.setupwraith
+package:com.hisense.alexa
+package:com.amazon.amazonvideo.livingroom
+package:com.hisense.storemode
+package:com.mstar.android.tv.disclaimercustomization
+package:fusion.android.tv.demo
+package:com.google.android.youtube.tvmusic
+package:com.google.android.partnersetup
+package:com.google.android.videos
+package:com.iqiyi.i18n.tv
+package:com.google.android.feedback
+package:com.google.android.syncadapters.calendar
+package:com.hisense.fte
+package:com.hisense.hibrowser
+package:com.google.android.play.games

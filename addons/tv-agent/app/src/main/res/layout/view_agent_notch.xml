@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/notchContainer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/notch_bg"
+    android:paddingStart="18dp"
+    android:paddingEnd="18dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="8dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <!-- Glowing animated status dot -->
+    <View
+        android:id="@+id/notchDot"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:background="@drawable/notch_dot" />
+
+    <!-- Agent Title / Icon -->
+    <TextView
+        android:id="@+id/notchTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="TV AGENT"
+        android:textColor="#FFFFFFFF"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.08" />
+
+    <TextView
+        android:id="@+id/notchSep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:text="•"
+        android:textColor="#66FFFFFF"
+        android:textSize="12sp" />
+
+    <!-- Current Step / Tool status -->
+    <TextView
+        android:id="@+id/notchStep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:maxWidth="380dp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:text="Ready"
+        android:textColor="#FF00B2E3"
+        android:textSize="12sp" />
+
+    <!-- Provider badge -->
+    <TextView
+        android:id="@+id/notchBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="AI"
+        android:textColor="#80FFFFFF"
+        android:textSize="10sp" />
+</LinearLayout>

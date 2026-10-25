@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -58,6 +59,10 @@ public final class OrbService extends Service {
     private VoiceServer server;
     private WindowManager windows;
     private View orbRoot;
+    private View notchDot;
+    private TextView notchTitle;
+    private TextView notchStep;
+    private TextView notchBadge;
     private OrbView orb;
     private TextView bubble;
     private Runnable hideBubble;
@@ -178,28 +183,12 @@ public final class OrbService extends Service {
         screenW = metrics.widthPixels;
         screenH = metrics.heightPixels;
 
-        LinearLayout row = new LinearLayout(this);
-        row.setOrientation(LinearLayout.HORIZONTAL);
-        row.setGravity(Gravity.CENTER_VERTICAL);
-
-        bubble = new TextView(this);
-        bubble.setTextSize(16);
-        bubble.setTextColor(0xFFE6EBF2);
-        bubble.setMaxLines(4);
-        bubble.setEllipsize(TextUtils.TruncateAt.END);
-        bubble.setMaxWidth(dp(380));
-        bubble.setPadding(dp(14), dp(10), dp(14), dp(10));
-        bubble.setBackground(bubbleBackground());
-        bubble.setElevation(dp(4));
-        bubble.setVisibility(View.GONE);
-        row.addView(bubble, new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        orb = new OrbView(this);
-        LinearLayout.LayoutParams orbParams = new LinearLayout.LayoutParams(dp(64), dp(64));
-        orbParams.setMarginStart(dp(12));
-        row.addView(orb, orbParams);
-        orb.setOnClickListener(v -> openApp());
+        View notch = LayoutInflater.from(this).inflate(R.layout.view_agent_notch, null);
+        notchDot = notch.findViewById(R.id.notchDot);
+        notchTitle = notch.findViewById(R.id.notchTitle);
+        notchStep = notch.findViewById(R.id.notchStep);
+        notchBadge = notch.findViewById(R.id.notchBadge);
+        notch.setOnClickListener(v -> openApp());
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -208,24 +197,18 @@ public final class OrbService extends Service {
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                         | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT);
-        params.gravity = Gravity.TOP | Gravity.END;
-        int savedX = prefs.orbX();
-        int savedY = prefs.orbY();
-        params.x = savedX >= 0 ? savedX : dp(20);
-        params.y = savedY >= 0 ? savedY : dp(44);
+        params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+        params.x = 0;
+        params.y = 0;
         try {
-            windows.addView(row, params);
+            windows.addView(notch, params);
         } catch (RuntimeException e) {
             Log.w(TAG, "could not add the overlay", e);
             Toast.makeText(this, R.string.orb_permission, Toast.LENGTH_LONG).show();
             return false;
         }
-        orbRoot = row;
-        params.x = clampX(params.x);
-        params.y = clampY(params.y);
-        windows.updateViewLayout(row, params);
-        attachDrag(params);
-        Log.d(TAG, "overlay added at x=" + params.x + " y=" + params.y);
+        orbRoot = notch;
+        Log.d(TAG, "notch overlay added at top center");
         return true;
     }
 
@@ -355,40 +338,53 @@ public final class OrbService extends Service {
 
     private String ask(String text) {
         if (!BUSY.compareAndSet(false, true)) return null;
-        setOrbWorking(true);
+        setNotchState("🧠 Planning...", 0xFF00B2E3);
         try {
             final String[] answer = {null};
             engine().run(text, new AgentEngine.Listener() {
                 @Override
                 public void onNote(String note) {
-                    // The phone page shows the plan; the orb only pulses.
+                    setNotchState("🧠 " + note, 0xFF00B2E3);
                 }
 
                 @Override
                 public void onStep(String step) {
-                    // One line per tool would flash too fast on the TV.
+                    setNotchState("⚙️ " + step, 0xFFFFC629);
                 }
 
                 @Override
                 public void onAnswer(String text) {
                     answer[0] = text;
-                    showBubble(text, false);
+                    setNotchState("✓ " + text, 0xFF10B981);
                     speak(text);
+                    main.postDelayed(() -> setNotchState("Ready", 0xFF00B2E3), 6000);
                 }
 
                 @Override
                 public void onError(String message) {
-                    showBubble(message, true);
+                    setNotchState("✗ " + message, 0xFFFF5252);
+                    main.postDelayed(() -> setNotchState("Ready", 0xFF00B2E3), 6000);
                 }
             });
             return answer[0];
         } catch (RuntimeException e) {
-            showBubble(message(e), true);
+            setNotchState("✗ " + message(e), 0xFFFF5252);
             return null;
         } finally {
             BUSY.set(false);
-            setOrbWorking(false);
         }
+    }
+
+    private void setNotchState(String text, int color) {
+        main.post(() -> {
+            if (notchStep != null) {
+                notchStep.setText(text);
+                notchStep.setTextColor(color);
+            }
+            if (notchDot != null) {
+                notchDot.setBackgroundColor(color);
+            }
+        });
     }
 
     private synchronized AgentEngine engine() {

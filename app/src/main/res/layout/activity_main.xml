@@ -87,6 +87,40 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
+    <!-- TV Agent Top Notch Status Tracker -->
+    <LinearLayout
+        android:id="@+id/tvAgentNotch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:background="@drawable/notch_bg"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="7dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:focusable="false"
+        android:importantForAccessibility="no">
+
+        <View
+            android:id="@+id/tvAgentNotchDot"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="@drawable/notch_dot" />
+
+        <TextView
+            android:id="@+id/tvAgentNotchText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="AGENT · READY"
+            android:textColor="#CC00B2E3"
+            android:textSize="10sp"
+            android:fontFamily="@string/font_medium"
+            android:letterSpacing="0.08" />
+    </LinearLayout>
+
     <!-- Main Screen Content Layout -->
     <LinearLayout
         android:layout_width="match_parent"
