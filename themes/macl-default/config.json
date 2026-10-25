@@ -1,0 +1,27 @@
+{
+  "name": "MACL Classic Glass",
+  "dock_apps": [
+    "com.macl.services",
+    "com.macl.tvagent",
+    "com.netflix.ninja",
+    "com.google.android.youtube.tv",
+    "de.herber_edevelopment.m3uiptv",
+    "com.android.chrome"
+  ],
+  "dock_title": false,
+  "icon_only_buttons": true,
+  "icon_only_inputs": true,
+  "macl_services": true,
+  "background_color": "#0C184A",
+  "wallpaper": true,
+  "wallpaper_dim": 30,
+  "dock_glass": true,
+  "dock_even_padding": true,
+  "glow_style": "horizon",
+  "app_glow": true,
+  "focus_overshoot": false,
+  "accent_color": "#00B2E3",
+  "greeting_name": "MACL",
+  "cinematic_home": false,
+  "advanced_effects": true
+}
