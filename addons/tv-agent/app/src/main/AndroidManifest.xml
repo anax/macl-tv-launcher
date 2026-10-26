@@ -6,6 +6,7 @@
 
     <!-- The model API and the phone page on the local network. -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <!-- The floating orb, drawn over the app you are watching. Granted with the installer's appops line
          (or Settings > Special app access > Display over other apps); it is never requested silently. -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />

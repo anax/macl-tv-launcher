@@ -1,5 +1,6 @@
 package com.macl.tvagent;
 
+import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -72,6 +73,12 @@ public final class DeviceTools implements Toolbox {
                     return say(args.optString("text"));
                 case ToolSpecs.TIME:
                     return time();
+                case ToolSpecs.CLOSE_APP:
+                    return closeApp(args.optString("query"));
+                case ToolSpecs.GO_HOME:
+                    return goHome();
+                case ToolSpecs.MUTE:
+                    return mute(args.optString("action"));
                 default:
                     return "error: unknown tool " + name;
             }
@@ -151,6 +158,74 @@ public final class DeviceTools implements Toolbox {
         ctx.startActivity(launch);
         sleep(400);
         return "opened " + exact.label;
+    }
+
+    private App findApp(String asked) {
+        if (asked == null || asked.trim().isEmpty()) return null;
+        List<App> all = apps();
+        String needle = fold(asked.trim());
+        for (App app : all) {
+            if (app.pkg.equalsIgnoreCase(asked.trim()) || fold(app.label).equals(needle)) {
+                return app;
+            }
+        }
+        for (App app : all) {
+            if (fold(app.label).contains(needle) || app.pkg.toLowerCase(Locale.ROOT).contains(needle)) {
+                return app;
+            }
+        }
+        return null;
+    }
+
+    private String closeApp(String query) {
+        String asked = query == null ? "" : query.trim();
+        App target = findApp(asked);
+
+        // 1. Stop any playing media
+        AudioManager audio = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+        if (audio != null) {
+            long now = SystemClock.uptimeMillis();
+            audio.dispatchMediaKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_STOP, 0));
+            audio.dispatchMediaKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_STOP, 0));
+        }
+
+        // 2. Return to TV Home Screen
+        goHome();
+
+        // 3. Kill target app background process
+        if (target != null) {
+            ActivityManager am = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
+            if (am != null) {
+                am.killBackgroundProcesses(target.pkg);
+            }
+            return "closed " + target.label + " and returned to Home screen";
+        }
+        return "exited active app and returned to Home screen";
+    }
+
+    private String goHome() {
+        Intent home = new Intent(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_HOME)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ctx.startActivity(home);
+        sleep(300);
+        return "returned to the TV Home screen";
+    }
+
+    private String mute(String action) {
+        AudioManager audio = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+        if (audio == null) return "error: no audio service";
+        String act = action == null ? "toggle" : action.trim().toLowerCase(Locale.ROOT);
+        if ("mute".equals(act)) {
+            audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_MUTE, 0);
+            return "TV audio is now muted";
+        } else if ("unmute".equals(act)) {
+            audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_UNMUTE, 0);
+            return "TV audio is now unmuted";
+        } else {
+            audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_TOGGLE_MUTE, 0);
+            return "TV mute toggled";
+        }
     }
 
     private String listApps() {

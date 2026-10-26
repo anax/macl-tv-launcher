@@ -15,6 +15,9 @@ public final class ToolSpecs {
     public static final String VOLUME = "volume";
     public static final String SAY = "say";
     public static final String TIME = "time";
+    public static final String CLOSE_APP = "close_app";
+    public static final String GO_HOME = "go_home";
+    public static final String MUTE = "mute";
 
     private ToolSpecs() {
     }
@@ -68,6 +71,20 @@ public final class ToolSpecs {
             out.put(function(TIME,
                     "The TV's current date, time and time zone.",
                     null));
+            out.put(function(CLOSE_APP,
+                    "Close or exit an active app and return to the TV Home launcher screen.",
+                    props(named("query", new JSONObject()
+                            .put("type", "STRING")
+                            .put("description", "App name as shown on the TV (\"YouTube\", \"Netflix\") or its package name."))),
+                    "query"));
+            out.put(function(GO_HOME,
+                    "Navigate back to the TV Home launcher screen immediately.",
+                    null));
+            out.put(function(MUTE,
+                    "Mute, unmute, or toggle TV audio.",
+                    props(named("action", enumOf("Action to take.",
+                            "toggle", "mute", "unmute"))),
+                    "action"));
             return out;
         } catch (JSONException e) {
             throw new IllegalStateException("tool declarations", e);
@@ -86,6 +103,9 @@ public final class ToolSpecs {
             case VOLUME:
             case SAY:
             case TIME:
+            case CLOSE_APP:
+            case GO_HOME:
+            case MUTE:
                 return true;
             default:
                 return false;
