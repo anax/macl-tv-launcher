@@ -180,7 +180,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private View maclWidgetBar;
     private View cardWidgetFis, cardWidgetPrayer, cardWidgetBus, cardWidgetAppsFolder;
     private View dockCapsule;
-    private View dockItemTv, dockItemVideo, dockItemMusic, dockItemGames, dockItemChat, dockItemStore, dockItemApps;
+    private View dockItemServices, dockItemFis, dockItemAgent, dockItemYoutube, dockItemMedia, dockItemIptv, dockItemStore;
     private TextView tvWidgetFisStatus, tvWidgetFisFlight, tvWidgetFisRoute;
     private TextView tvWidgetPrayerName, tvWidgetPrayerCountdown, tvWidgetPrayerTime;
     private TextView tvWidgetBusRoute1, tvWidgetBusRoute2;
@@ -496,100 +496,60 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         }
 
         dockCapsule = findViewById(R.id.dockCapsule);
-        dockItemTv = findViewById(R.id.dockItemTv);
-        dockItemVideo = findViewById(R.id.dockItemVideo);
-        dockItemMusic = findViewById(R.id.dockItemMusic);
-        dockItemGames = findViewById(R.id.dockItemGames);
-        dockItemChat = findViewById(R.id.dockItemChat);
+        dockItemServices = findViewById(R.id.dockItemServices);
+        dockItemFis = findViewById(R.id.dockItemFis);
+        dockItemAgent = findViewById(R.id.dockItemAgent);
+        dockItemYoutube = findViewById(R.id.dockItemYoutube);
+        dockItemMedia = findViewById(R.id.dockItemMedia);
+        dockItemIptv = findViewById(R.id.dockItemIptv);
         dockItemStore = findViewById(R.id.dockItemStore);
-        dockItemApps = findViewById(R.id.dockItemApps);
 
         View.OnFocusChangeListener dockFocusListener = (v, hasFocus) -> {
             float scale = hasFocus ? 1.15f : 1.0f;
             v.animate().scaleX(scale).scaleY(scale).setDuration(150).start();
         };
 
-        if (dockItemTv != null) {
-            dockItemTv.setOnFocusChangeListener(dockFocusListener);
-            dockItemTv.setOnClickListener(v -> {
-                Intent intent = null;
-                if (liveTvPkg != null && !liveTvPkg.isEmpty()) {
-                    intent = getPackageManager().getLeanbackLaunchIntentForPackage(liveTvPkg);
-                    if (intent == null) intent = getPackageManager().getLaunchIntentForPackage(liveTvPkg);
-                }
-                if (intent != null) {
-                    try { startActivity(intent); } catch (Exception ignored) {}
-                } else {
-                    showInputs();
+        if (dockItemServices != null) {
+            dockItemServices.setOnFocusChangeListener(dockFocusListener);
+            dockItemServices.setOnClickListener(v -> launchPackageOrLibrary("com.macl.services"));
+        }
+
+        if (dockItemFis != null) {
+            dockItemFis.setOnFocusChangeListener(dockFocusListener);
+            dockItemFis.setOnClickListener(v -> {
+                try {
+                    Intent it = new Intent(Intent.ACTION_VIEW, Uri.parse("https://fis.com.mv"));
+                    it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(it);
+                } catch (Exception e) {
+                    launchPackageOrLibrary("com.android.chrome", "com.macl.services");
                 }
             });
         }
 
-        if (dockItemVideo != null) {
-            dockItemVideo.setOnFocusChangeListener(dockFocusListener);
-            dockItemVideo.setOnClickListener(v -> {
-                String[] videoPkgs = {"com.google.android.youtube.tv", "com.netflix.ninja", "com.amazon.amazonvideo.livingroom"};
-                for (String pkg : videoPkgs) {
-                    Intent it = getPackageManager().getLeanbackLaunchIntentForPackage(pkg);
-                    if (it == null) it = getPackageManager().getLaunchIntentForPackage(pkg);
-                    if (it != null) {
-                        try { startActivity(it); return; } catch (Exception ignored) {}
-                    }
-                }
-                onLibraryRequested();
-            });
+        if (dockItemAgent != null) {
+            dockItemAgent.setOnFocusChangeListener(dockFocusListener);
+            dockItemAgent.setOnClickListener(v -> launchPackageOrLibrary("com.macl.tvagent", "com.macl.services"));
         }
 
-        if (dockItemMusic != null) {
-            dockItemMusic.setOnFocusChangeListener(dockFocusListener);
-            dockItemMusic.setOnClickListener(v -> {
-                String[] musicPkgs = {"com.spotify.tv.android", "com.google.android.music", "com.apple.android.music"};
-                for (String pkg : musicPkgs) {
-                    Intent it = getPackageManager().getLeanbackLaunchIntentForPackage(pkg);
-                    if (it == null) it = getPackageManager().getLaunchIntentForPackage(pkg);
-                    if (it != null) {
-                        try { startActivity(it); return; } catch (Exception ignored) {}
-                    }
-                }
-                onLibraryRequested();
-            });
+        if (dockItemYoutube != null) {
+            dockItemYoutube.setOnFocusChangeListener(dockFocusListener);
+            dockItemYoutube.setOnClickListener(v -> launchPackageOrLibrary("com.google.android.youtube.tv", "com.google.android.youtube"));
         }
 
-        if (dockItemGames != null) {
-            dockItemGames.setOnFocusChangeListener(dockFocusListener);
-            dockItemGames.setOnClickListener(v -> onLibraryRequested());
+        if (dockItemMedia != null) {
+            dockItemMedia.setOnFocusChangeListener(dockFocusListener);
+            dockItemMedia.setOnClickListener(v -> launchPackageOrLibrary("com.vt.tv.mediacenter", "com.mediatek.wwtv.tvcenter", "com.google.android.apps.mediashell"));
         }
 
-        if (dockItemChat != null) {
-            dockItemChat.setOnFocusChangeListener(dockFocusListener);
-            dockItemChat.setOnClickListener(v -> {
-                Intent it = getPackageManager().getLeanbackLaunchIntentForPackage("com.macl.tvagent");
-                if (it == null) it = getPackageManager().getLaunchIntentForPackage("com.macl.tvagent");
-                if (it == null) it = getPackageManager().getLaunchIntentForPackage("com.macl.services");
-                if (it != null) {
-                    try { startActivity(it); } catch (Exception ignored) {}
-                } else {
-                    onLibraryRequested();
-                }
-            });
+        if (dockItemIptv != null) {
+            dockItemIptv.setOnFocusChangeListener(dockFocusListener);
+            dockItemIptv.setOnClickListener(v -> launchPackageOrLibrary("de.herber_edevelopment.m3uiptv"));
         }
 
         if (dockItemStore != null) {
             dockItemStore.setOnFocusChangeListener(dockFocusListener);
-            dockItemStore.setOnClickListener(v -> {
-                Intent it = getPackageManager().getLeanbackLaunchIntentForPackage("com.android.vending");
-                if (it == null) it = getPackageManager().getLaunchIntentForPackage("com.android.vending");
-                if (it != null) {
-                    try { startActivity(it); } catch (Exception ignored) {}
-                } else {
-                    onLibraryRequested();
-                }
-            });
-        }
-
-        if (dockItemApps != null) {
-            dockItemApps.setOnFocusChangeListener(dockFocusListener);
-            dockItemApps.setOnClickListener(v -> onLibraryRequested());
+            dockItemStore.setOnClickListener(v -> launchPackageOrLibrary("com.android.vending"));
         }
         showStats = cfg.showStats;
         maclServices = cfg.maclServices;
@@ -925,8 +885,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         if (openLauncherSettingsIfAsked(intent)) return;
         if (openInputsIfAsked(intent)) return;
         if (intent == null || !intent.hasCategory(Intent.CATEGORY_HOME)) return;
-        if (dockItemTv != null) {
-            dockItemTv.requestFocus();
+        if (dockItemServices != null) {
+            dockItemServices.requestFocus();
             return;
         }
         grid.scrollToPosition(0);
@@ -1002,8 +962,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             pillsShown = true;
         }
         if (showStats) startStats();
-        if (dockItemTv != null && getCurrentFocus() == null) {
-            dockItemTv.post(() -> dockItemTv.requestFocus());
+        if (dockItemServices != null && getCurrentFocus() == null) {
+            dockItemServices.post(() -> dockItemServices.requestFocus());
         }
         sky.update();
         wallpaperPlayer.start();
@@ -1594,6 +1554,21 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     }
 
     // ---- glass highlight -------------------------------------------------------------------------
+
+    private void launchPackageOrLibrary(String... pkgs) {
+        for (String pkg : pkgs) {
+            if (pkg == null || pkg.isEmpty()) continue;
+            Intent it = getPackageManager().getLeanbackLaunchIntentForPackage(pkg);
+            if (it == null) it = getPackageManager().getLaunchIntentForPackage(pkg);
+            if (it != null) {
+                try {
+                    startActivity(it);
+                    return;
+                } catch (Exception ignored) {}
+            }
+        }
+        onLibraryRequested();
+    }
 
     @Override
     public void onLibraryRequested() {
@@ -2325,8 +2300,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private void focusTile(int position) {
         libraryFocusPending = false;
         cancelPendingFocusScroll();
-        if (dockItemTv != null) {
-            dockItemTv.requestFocus();
+        if (dockItemServices != null) {
+            dockItemServices.requestFocus();
             return;
         }
         if (adapter.appCount() == 0) {

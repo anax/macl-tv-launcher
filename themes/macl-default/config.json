@@ -2,11 +2,12 @@
   "name": "MACL Classic Glass",
   "dock_apps": [
     "com.macl.services",
+    "com.android.chrome",
     "com.macl.tvagent",
-    "com.netflix.ninja",
     "com.google.android.youtube.tv",
+    "com.vt.tv.mediacenter",
     "de.herber_edevelopment.m3uiptv",
-    "com.android.chrome"
+    "com.android.vending"
   ],
   "dock_title": false,
   "icon_only_buttons": true,

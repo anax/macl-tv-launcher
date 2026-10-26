@@ -315,7 +315,7 @@
                 android:padding="18dp"
                 android:nextFocusUp="@+id/btnInputs"
                 android:nextFocusRight="@+id/cardWidgetPrayer"
-                android:nextFocusDown="@+id/dockItemTv">
+                android:nextFocusDown="@+id/dockItemServices">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -399,7 +399,7 @@
                 android:nextFocusUp="@+id/btnWifi"
                 android:nextFocusLeft="@+id/cardWidgetFis"
                 android:nextFocusRight="@+id/cardWidgetAppsFolder"
-                android:nextFocusDown="@+id/dockItemMusic">
+                android:nextFocusDown="@+id/dockItemYoutube">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -481,7 +481,7 @@
                 android:gravity="center"
                 android:nextFocusUp="@+id/btnSettings"
                 android:nextFocusLeft="@+id/cardWidgetPrayer"
-                android:nextFocusDown="@+id/dockItemApps">
+                android:nextFocusDown="@+id/dockItemStore">
 
                 <!-- 3x3 App Icon Grid -->
                 <!-- Row 1 -->
@@ -608,116 +608,138 @@
             android:clipChildren="false"
             android:clipToPadding="false">
 
-            <!-- 1. TV / Live TV -->
+            <!-- 1. MACL Services -->
             <FrameLayout
-                android:id="@+id/dockItemTv"
+                android:id="@+id/dockItemServices"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="6dp"
                 android:layout_marginEnd="6dp"
-                android:background="@drawable/dock_tile_tv"
+                android:background="@drawable/dock_tile_services"
                 android:focusable="true"
                 android:clickable="true"
                 android:nextFocusUp="@+id/cardWidgetFis"
-                android:nextFocusRight="@+id/dockItemVideo">
+                android:nextFocusRight="@+id/dockItemFis">
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_livetv"
-                    android:contentDescription="Live TV" />
+                    android:src="@drawable/ic_dock_macl"
+                    android:contentDescription="MACL Services" />
             </FrameLayout>
 
-            <!-- 2. Video / Streaming -->
+            <!-- 2. fis.com.mv (Flight Info) -->
             <FrameLayout
-                android:id="@+id/dockItemVideo"
+                android:id="@+id/dockItemFis"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="6dp"
                 android:layout_marginEnd="6dp"
-                android:background="@drawable/dock_tile_video"
+                android:background="@drawable/dock_tile_fis"
                 android:focusable="true"
                 android:clickable="true"
                 android:nextFocusUp="@+id/cardWidgetFis"
-                android:nextFocusLeft="@+id/dockItemTv"
-                android:nextFocusRight="@+id/dockItemMusic">
+                android:nextFocusLeft="@+id/dockItemServices"
+                android:nextFocusRight="@+id/dockItemAgent">
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_dock_play"
-                    android:contentDescription="Video" />
+                    android:src="@drawable/ic_dock_fis"
+                    android:contentDescription="fis.com.mv" />
             </FrameLayout>
 
-            <!-- 3. Music -->
+            <!-- 3. tv-agent (AI Assistant) -->
             <FrameLayout
-                android:id="@+id/dockItemMusic"
+                android:id="@+id/dockItemAgent"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="6dp"
                 android:layout_marginEnd="6dp"
-                android:background="@drawable/dock_tile_music"
+                android:background="@drawable/dock_tile_agent"
                 android:focusable="true"
                 android:clickable="true"
                 android:nextFocusUp="@+id/cardWidgetPrayer"
-                android:nextFocusLeft="@+id/dockItemVideo"
-                android:nextFocusRight="@+id/dockItemGames">
+                android:nextFocusLeft="@+id/dockItemFis"
+                android:nextFocusRight="@+id/dockItemYoutube">
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_dock_music"
-                    android:contentDescription="Music" />
+                    android:src="@drawable/ic_dock_agent"
+                    android:contentDescription="TV Agent" />
             </FrameLayout>
 
-            <!-- 4. Games -->
+            <!-- 4. YouTube -->
             <FrameLayout
-                android:id="@+id/dockItemGames"
+                android:id="@+id/dockItemYoutube"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="6dp"
                 android:layout_marginEnd="6dp"
-                android:background="@drawable/dock_tile_games"
+                android:background="@drawable/dock_tile_youtube"
                 android:focusable="true"
                 android:clickable="true"
                 android:nextFocusUp="@+id/cardWidgetPrayer"
-                android:nextFocusLeft="@+id/dockItemMusic"
-                android:nextFocusRight="@+id/dockItemChat">
+                android:nextFocusLeft="@+id/dockItemAgent"
+                android:nextFocusRight="@+id/dockItemMedia">
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_dock_gamepad"
-                    android:contentDescription="Games" />
+                    android:src="@drawable/ic_dock_youtube"
+                    android:contentDescription="YouTube" />
             </FrameLayout>
 
-            <!-- 5. Assistant / Services -->
+            <!-- 5. MediaCenter -->
             <FrameLayout
-                android:id="@+id/dockItemChat"
+                android:id="@+id/dockItemMedia"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="6dp"
                 android:layout_marginEnd="6dp"
-                android:background="@drawable/dock_tile_chat"
+                android:background="@drawable/dock_tile_media"
                 android:focusable="true"
                 android:clickable="true"
                 android:nextFocusUp="@+id/cardWidgetPrayer"
-                android:nextFocusLeft="@+id/dockItemGames"
+                android:nextFocusLeft="@+id/dockItemYoutube"
+                android:nextFocusRight="@+id/dockItemIptv">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_dock_media"
+                    android:contentDescription="MediaCenter" />
+            </FrameLayout>
+
+            <!-- 6. m3u IPTV -->
+            <FrameLayout
+                android:id="@+id/dockItemIptv"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/dock_tile_iptv"
+                android:focusable="true"
+                android:clickable="true"
+                android:nextFocusUp="@+id/cardWidgetAppsFolder"
+                android:nextFocusLeft="@+id/dockItemMedia"
                 android:nextFocusRight="@+id/dockItemStore">
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_dock_chat"
-                    android:contentDescription="Assistant" />
+                    android:src="@drawable/ic_dock_iptv"
+                    android:contentDescription="m3u IPTV" />
             </FrameLayout>
 
-            <!-- 6. App Store -->
+            <!-- 7. Google Play Store -->
             <FrameLayout
                 android:id="@+id/dockItemStore"
                 android:layout_width="60dp"
@@ -728,36 +750,14 @@
                 android:focusable="true"
                 android:clickable="true"
                 android:nextFocusUp="@+id/cardWidgetAppsFolder"
-                android:nextFocusLeft="@+id/dockItemChat"
-                android:nextFocusRight="@+id/dockItemApps">
+                android:nextFocusLeft="@+id/dockItemIptv">
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_dock_store"
-                    android:contentDescription="Store" />
-            </FrameLayout>
-
-            <!-- 7. All Apps Drawer -->
-            <FrameLayout
-                android:id="@+id/dockItemApps"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
-                android:background="@drawable/dock_tile_apps"
-                android:focusable="true"
-                android:clickable="true"
-                android:nextFocusUp="@+id/cardWidgetAppsFolder"
-                android:nextFocusLeft="@+id/dockItemStore">
-
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_dock_grid4"
-                    android:contentDescription="All Apps" />
+                    android:contentDescription="Google Play Store" />
             </FrameLayout>
         </LinearLayout>
 
