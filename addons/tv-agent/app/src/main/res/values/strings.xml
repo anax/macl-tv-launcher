@@ -7,9 +7,9 @@
     <string name="status_no_key">%1$s · no key</string>
     <string name="status_working">Working…</string>
 
-    <string name="input_hint">Ask for a task…</string>
-    <string name="send">Ask</string>
-    <string name="voice">Phone voice</string>
+    <string name="input_hint">Ask anything, @ to mention, / for actions</string>
+    <string name="send">➔</string>
+    <string name="voice">🎙️</string>
     <string name="settings">Settings</string>
     <string name="examples">Try: movie night · open YouTube and search for trains · turn it down · what is on at 9?</string>
 

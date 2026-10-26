@@ -1,79 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Full screen on a 1080p TV (960 x 540 dp), driven by a D-pad: every control shows focus. -->
+<!-- Zenith Command Center: Ultra-minimalist AI Command Capsule Layout -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF0B0F14">
+    android:background="#FF0B0C0E">
 
     <LinearLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingStart="56dp"
-        android:paddingTop="32dp"
-        android:paddingEnd="56dp"
+        android:paddingStart="64dp"
+        android:paddingTop="28dp"
+        android:paddingEnd="64dp"
         android:paddingBottom="24dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-black"
-                android:letterSpacing="0.18"
-                android:text="@string/title"
-                android:textAllCaps="true"
-                android:textColor="#FF7C5CFF"
-                android:textSize="22sp" />
-
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="#FF8A97A8"
-                android:textSize="15sp" />
-
-            <Button
-                android:id="@+id/voice"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:background="@drawable/btn"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:text="@string/voice"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFFFF"
-                android:textSize="15sp" />
-
-            <Button
-                android:id="@+id/settings"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_marginStart="12dp"
-                android:background="@drawable/btn"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:text="@string/settings"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFFFF"
-                android:textSize="15sp" />
-        </LinearLayout>
-
+        <!-- Upper Conversation Transcript Area -->
         <ScrollView
             android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="18dp"
             android:layout_weight="1"
             android:fadingEdge="none"
             android:scrollbars="none">
@@ -82,61 +29,184 @@
                 android:id="@+id/transcript"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxWidth="760dp"
+                android:layout_gravity="center_horizontal"
                 android:orientation="vertical"
-                android:paddingBottom="8dp" />
+                android:paddingBottom="12dp" />
         </ScrollView>
 
+        <!-- Centered Hero Command Capsule Area -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:maxWidth="760dp"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/input"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:background="@drawable/field"
-                android:hint="@string/input_hint"
-                android:imeOptions="actionSend"
-                android:importantForAutofill="no"
-                android:inputType="textCapSentences"
-                android:maxLines="1"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:singleLine="true"
-                android:textColor="#FFFFFFFF"
-                android:textColorHint="#FF66717F"
-                android:textSize="18sp" />
-
-            <Button
-                android:id="@+id/send"
+            <!-- Top Breadcrumb / Workspace Pill -->
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="56dp"
-                android:layout_marginStart="12dp"
-                android:background="@drawable/btn"
-                android:minWidth="120dp"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp"
-                android:text="@string/send"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFFFF"
-                android:textSize="17sp" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/examples"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:singleLine="true"
-            android:text="@string/examples"
-            android:textColor="#FF66717F"
-            android:textSize="13sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📁 macl-tv-launcher  ⌵"
+                    android:textColor="#FF9CA3AF"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Main Input Capsule Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/command_box_bg"
+                android:orientation="vertical"
+                android:paddingStart="18dp"
+                android:paddingTop="14dp"
+                android:paddingEnd="18dp"
+                android:paddingBottom="14dp">
+
+                <!-- Prompt Input Field -->
+                <EditText
+                    android:id="@+id/input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="42dp"
+                    android:background="@null"
+                    android:gravity="top|start"
+                    android:hint="@string/input_hint"
+                    android:imeOptions="actionSend"
+                    android:importantForAutofill="no"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLines="3"
+                    android:textColor="#FFFFFFFF"
+                    android:textColorHint="#FF6B7280"
+                    android:textSize="16sp" />
+
+                <!-- Bottom Capsule Utility Action Bar -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <!-- Left: Model Selector Pill (+ Gemini 3.8 Flash Medium ⌵) -->
+                    <LinearLayout
+                        android:id="@+id/settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="34dp"
+                        android:background="@drawable/pill_chip_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="+ "
+                            android:textColor="#FF9CA3AF"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="Gemini 3.8 Flash Medium  ⌵"
+                            android:textColor="#FFD1D5DB"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <!-- Spacer -->
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+
+                    <!-- Right Controls: Default Shield Pill -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="34dp"
+                        android:background="@drawable/pill_chip_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:text="🛡️ Default  ⌵"
+                        android:textColor="#FFD1D5DB"
+                        android:textSize="13sp" />
+
+                    <!-- Phone Voice / Mic Button -->
+                    <Button
+                        android:id="@+id/voice"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/pill_chip_bg"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:text="🎙️"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="15sp" />
+
+                    <!-- Circular Submit Button -->
+                    <Button
+                        android:id="@+id/send"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/btn_circle_send"
+                        android:gravity="center"
+                        android:padding="0dp"
+                        android:text="➔"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Bottom Metadata Status Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔲 Local  ⌵"
+                    android:textColor="#FF6B7280"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Main Agent  ⌵"
+                    android:textColor="#FF6B7280"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
+    <!-- Voice Pairing Modal Panel -->
     <LinearLayout
         android:id="@+id/voicePanel"
         android:layout_width="match_parent"
@@ -171,7 +241,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:fontFamily="monospace"
-            android:textColor="#FF9C86FF"
+            android:textColor="#FF00B2E3"
             android:textSize="40sp" />
 
         <TextView

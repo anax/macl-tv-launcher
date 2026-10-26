@@ -253,18 +253,22 @@ public final class AgentActivity extends Activity implements VoiceServer.Bridge 
 
     private void setWorking(boolean working) {
         send.setEnabled(!working);
-        send.setAlpha(working ? 0.5f : 1f);
+        send.setAlpha(working ? 0.4f : 1f);
         if (working) {
-            status.setText(R.string.status_working);
+            status.setText("Working…");
         } else {
             updateStatus();
         }
     }
 
     private void updateStatus() {
-        status.setText(prefs.hasKey()
-                ? getString(R.string.status_key_set, prefs.activeModel())
-                : getString(R.string.status_no_key, prefs.activeModel()));
+        String m = prefs.activeModel();
+        if ("gemini-3.8-flash".equalsIgnoreCase(m) || "gemini-2.5-flash".equalsIgnoreCase(m)) {
+            m = "Gemini 3.8 Flash Medium";
+        } else if (m.contains("glm-4.7-flash")) {
+            m = "GLM 4.7 Flash";
+        }
+        status.setText(m + "  ⌵");
     }
 
     private AgentEngine buildEngine() {
@@ -276,32 +280,33 @@ public final class AgentActivity extends Activity implements VoiceServer.Bridge 
         if (text == null || text.isEmpty()) return;
         TextView view = new TextView(this);
         view.setText(text);
-        view.setTextSize(kind == KIND_STEP ? 14 : 18);
+        view.setTextSize(kind == KIND_STEP ? 13 : 16);
         view.setLineSpacing(dp(3), 1f);
-        int padH = dp(18);
-        int padV = dp(12);
+        int padH = dp(16);
+        int padV = dp(10);
         view.setPadding(padH, padV, padH, padV);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.topMargin = dp(8);
         switch (kind) {
             case KIND_USER:
                 view.setBackgroundResource(R.drawable.bubble_user);
-                view.setTextColor(0xFFEDE8FF);
+                view.setTextColor(0xFFFFFFFF);
+                params.gravity = android.view.Gravity.END;
                 break;
             case KIND_STEP:
                 view.setTypeface(Typeface.MONOSPACE);
-                view.setTextColor(0xFF8A97A8);
-                params.setMarginStart(dp(10));
+                view.setTextColor(0xFF9CA3AF);
+                params.setMarginStart(dp(6));
                 break;
             case KIND_ERROR:
                 view.setBackgroundResource(R.drawable.bubble_agent);
-                view.setTextColor(0xFFFF9AA9);
+                view.setTextColor(0xFFFF6B6B);
                 break;
             default:
                 view.setBackgroundResource(R.drawable.bubble_agent);
-                view.setTextColor(0xFFE6EBF2);
+                view.setTextColor(0xFFE5E7EB);
         }
 
         transcript.addView(view, params);
