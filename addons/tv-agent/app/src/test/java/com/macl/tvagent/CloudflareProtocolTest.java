@@ -56,7 +56,7 @@ public class CloudflareProtocolTest {
         assertEquals("object", function.getJSONObject("parameters").getString("type"));
         assertEquals("string", function.getJSONObject("parameters").getJSONObject("properties")
                 .getJSONObject("query").getString("type"));
-        assertEquals(9, request.getJSONArray("tools").length());
+        assertEquals(ToolSpecs.declarations().length(), request.getJSONArray("tools").length());
     }
 
     @Test

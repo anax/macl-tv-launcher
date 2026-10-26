@@ -218,8 +218,10 @@ public final class VoiceServer {
     }
 
     private void ask(Socket socket, HttpRequest request) throws IOException, JSONException {
-        boolean isLocal = socket.getInetAddress() != null && socket.getInetAddress().isLoopbackAddress();
-        if (!isLocal && !checkCode(request.param("code"))) {
+        boolean isLocalNoCode = socket.getInetAddress() != null
+                && socket.getInetAddress().isLoopbackAddress()
+                && (request.param("code") == null || request.param("code").isEmpty());
+        if (!isLocalNoCode && !checkCode(request.param("code"))) {
             wrongCode(socket);
             return;
         }

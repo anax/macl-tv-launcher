@@ -23,7 +23,7 @@ public class GeminiProtocolTest {
         assertEquals("movie night", request.getJSONArray("contents").getJSONObject(0)
                 .getJSONArray("parts").getJSONObject(0).getString("text"));
         assertEquals(512, request.getJSONObject("generationConfig").getInt("maxOutputTokens"));
-        assertEquals(9, request.getJSONArray("tools").getJSONObject(0)
+        assertEquals(ToolSpecs.declarations().length(), request.getJSONArray("tools").getJSONObject(0)
                 .getJSONArray("functionDeclarations").length());
         assertEquals("AUTO", request.getJSONObject("toolConfig").getJSONObject("functionCallingConfig")
                 .getString("mode"));
