@@ -98,6 +98,9 @@ ensure_connected() {
         exit 1
     fi
     "$ADB" connect "$ADB_TARGET" >/dev/null 2>&1 || true
+    if [ -z "$(getprop ro.product.model 2>/dev/null)" ] && [ ! -f "/system/build.prop" ]; then
+        "$ADB" -s "$ADB_TARGET" forward tcp:8787 tcp:8787 >/dev/null 2>&1 || true
+    fi
 }
 
 dispatch_prompt() {
@@ -109,10 +112,14 @@ dispatch_prompt() {
 
     # 1. Direct HTTP Bridge (VoiceServer) if reachable
     if command -v curl >/dev/null 2>&1; then
-        if curl -s -m 2 "http://$target_host:8787/state" >/dev/null 2>&1; then
+        local url_host="127.0.0.1"
+        if ! curl -s -m 1 "http://127.0.0.1:8787/state" >/dev/null 2>&1; then
+            url_host="$target_host"
+        fi
+        if curl -s -m 2 "http://$url_host:8787/state" >/dev/null 2>&1; then
             echo "🧠 Thinking..."
             local resp
-            resp=$(curl -s -X POST "http://$target_host:8787/ask" --data-urlencode "text=$text" 2>/dev/null || true)
+            resp=$(curl -s -X POST "http://$url_host:8787/ask" --data-urlencode "text=$text" 2>/dev/null || true)
             if [ -n "$resp" ]; then
                 local ans
                 ans=$(printf '%s' "$resp" | sed -n 's/.*"answer":"\([^"]*\)".*/\1/p' | sed 's/\\n/\n/g' | sed 's/\\"/"/g' || true)

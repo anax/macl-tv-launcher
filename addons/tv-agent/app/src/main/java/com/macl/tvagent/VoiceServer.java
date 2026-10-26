@@ -341,8 +341,20 @@ public final class VoiceServer {
     }
 
     private static boolean isLocal(InetAddress address) {
-        return address != null
-                && (address.isLoopbackAddress() || address.isSiteLocalAddress() || address.isLinkLocalAddress());
+        if (address == null) return false;
+        if (address.isLoopbackAddress() || address.isSiteLocalAddress() || address.isLinkLocalAddress()) {
+            return true;
+        }
+        byte[] bytes = address.getAddress();
+        // CGNAT / Tailscale mesh network: 100.64.0.0/10 (100.64.0.0 to 100.127.255.255)
+        if (bytes != null && bytes.length == 4) {
+            int b0 = bytes[0] & 0xFF;
+            int b1 = bytes[1] & 0xFF;
+            if (b0 == 100 && (b1 >= 64 && b1 <= 127)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** The TV's own Wi-Fi IPv4 address. Network enumeration needs no permission. */

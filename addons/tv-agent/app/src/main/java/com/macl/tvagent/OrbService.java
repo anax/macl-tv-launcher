@@ -59,7 +59,7 @@ public final class OrbService extends Service {
     private VoiceServer server;
     private WindowManager windows;
     private View orbRoot;
-    private View notchDot;
+    private OrbView notchDot;
     private TextView notchTitle;
     private TextView notchStep;
     private TextView notchBadge;
@@ -338,39 +338,39 @@ public final class OrbService extends Service {
 
     private String ask(String text) {
         if (!BUSY.compareAndSet(false, true)) return null;
-        setNotchState("🧠 Planning...", 0xFF00B2E3);
+        setNotchState("🧠 Planning...", 0xFF00B2E3, OrbView.STATE_THINKING);
         try {
             final String[] answer = {null};
             engine().run(text, new AgentEngine.Listener() {
                 @Override
                 public void onNote(String note) {
-                    setNotchState("🧠 " + note, 0xFF00B2E3);
+                    setNotchState("🧠 " + note, 0xFF00B2E3, OrbView.STATE_THINKING);
                 }
 
                 @Override
                 public void onStep(String step) {
-                    setNotchState("⚙️ " + step, 0xFFFFC629);
+                    setNotchState("⚙️ " + step, 0xFFFFC629, OrbView.STATE_EXECUTING);
                 }
 
                 @Override
                 public void onAnswer(String text) {
                     answer[0] = text;
-                    setNotchState("✓ " + text, 0xFF10B981);
+                    setNotchState("✓ " + text, 0xFF10B981, OrbView.STATE_ANSWERING);
                     speak(text);
                     writeResponseFile(text, null);
-                    main.postDelayed(() -> setNotchState("Ready", 0xFF00B2E3), 6000);
+                    main.postDelayed(() -> setNotchState("Ready", 0xFF00B2E3, OrbView.STATE_IDLE), 6000);
                 }
 
                 @Override
                 public void onError(String message) {
-                    setNotchState("✗ " + message, 0xFFFF5252);
+                    setNotchState("✗ " + message, 0xFFFF5252, OrbView.STATE_ERROR);
                     writeResponseFile(null, message);
-                    main.postDelayed(() -> setNotchState("Ready", 0xFF00B2E3), 6000);
+                    main.postDelayed(() -> setNotchState("Ready", 0xFF00B2E3, OrbView.STATE_IDLE), 6000);
                 }
             });
             return answer[0];
         } catch (RuntimeException e) {
-            setNotchState("✗ " + message(e), 0xFFFF5252);
+            setNotchState("✗ " + message(e), 0xFFFF5252, OrbView.STATE_ERROR);
             writeResponseFile(null, message(e));
             return null;
         } finally {
@@ -379,28 +379,43 @@ public final class OrbService extends Service {
     }
 
     private void writeResponseFile(String text, String error) {
-        try {
-            java.io.File file = new java.io.File("/data/local/tmp/zenith_response.txt");
-            java.io.FileWriter writer = new java.io.FileWriter(file);
-            if (error != null) {
-                writer.write("ERROR:" + error + "\n");
-            } else if (text != null) {
-                writer.write("ANSWER:" + text + "\n");
+        String content = error != null ? ("ERROR:" + error + "\n") : (text != null ? ("ANSWER:" + text + "\n") : "");
+        String[] paths = new String[] {
+            "/data/local/tmp/zenith_response.txt",
+            "/sdcard/zenith_response.txt"
+        };
+        for (String path : paths) {
+            try {
+                java.io.File file = new java.io.File(path);
+                if (content.isEmpty()) {
+                    if (file.exists()) file.delete();
+                    continue;
+                }
+                java.io.FileWriter writer = new java.io.FileWriter(file);
+                writer.write(content);
+                writer.close();
+                file.setReadable(true, false);
+            } catch (Exception ignored) {
             }
-            writer.close();
-            file.setReadable(true, false);
-        } catch (Exception ignored) {
         }
     }
 
-    private void setNotchState(String text, int color) {
+    private void setNotchState(String text, int color, int state) {
         main.post(() -> {
             if (notchStep != null) {
-                notchStep.setText(text);
-                notchStep.setTextColor(color);
+                notchStep.animate().alpha(0.2f).setDuration(80).withEndAction(() -> {
+                    notchStep.setText(text);
+                    notchStep.setTextColor(color);
+                    notchStep.animate().alpha(1f).setDuration(150).start();
+                }).start();
             }
             if (notchDot != null) {
-                notchDot.setBackgroundColor(color);
+                notchDot.setState(state, color);
+            }
+            if (orbRoot != null && (state == OrbView.STATE_THINKING || state == OrbView.STATE_ANSWERING)) {
+                orbRoot.animate().scaleX(1.03f).scaleY(1.03f).setDuration(160)
+                        .withEndAction(() -> orbRoot.animate().scaleX(1f).scaleY(1f).setDuration(220).start())
+                        .start();
             }
         });
     }

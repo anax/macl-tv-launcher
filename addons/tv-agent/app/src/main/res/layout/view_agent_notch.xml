@@ -13,12 +13,11 @@
     android:clipChildren="false"
     android:clipToPadding="false">
 
-    <!-- Glowing animated status dot -->
-    <View
+    <!-- Creative Animated Status Indicator (Breathing Halo / Orbit Arc / Soundwave) -->
+    <com.macl.tvagent.OrbView
         android:id="@+id/notchDot"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:background="@drawable/notch_dot" />
+        android:layout_width="16dp"
+        android:layout_height="16dp" />
 
     <!-- Agent Title / Icon -->
     <TextView

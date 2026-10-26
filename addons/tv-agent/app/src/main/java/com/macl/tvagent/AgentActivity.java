@@ -64,6 +64,7 @@ public final class AgentActivity extends Activity implements VoiceServer.Bridge 
     private TextView phoneCode;
     private Button phoneFloat;
     private Button phoneClose;
+    private OrbView appOrb;
 
     @Override
     protected void onCreate(Bundle state) {
@@ -77,6 +78,7 @@ public final class AgentActivity extends Activity implements VoiceServer.Bridge 
         input = findViewById(R.id.input);
         send = findViewById(R.id.send);
         status = findViewById(R.id.status);
+        appOrb = findViewById(R.id.appOrb);
         voicePanel = findViewById(R.id.voicePanel);
         phoneWhere = findViewById(R.id.phoneWhere);
         phoneUrl = findViewById(R.id.phoneUrl);
@@ -185,18 +187,25 @@ public final class AgentActivity extends Activity implements VoiceServer.Bridge 
         AgentEngine.Listener listener = new AgentEngine.Listener() {
             @Override
             public void onNote(String note) {
-                post(() -> append(note, KIND_AGENT));
+                post(() -> {
+                    if (appOrb != null) appOrb.setState(OrbView.STATE_THINKING, 0xFF00B2E3);
+                    append(note, KIND_AGENT);
+                });
             }
 
             @Override
             public void onStep(String step) {
-                post(() -> append(step, KIND_STEP));
+                post(() -> {
+                    if (appOrb != null) appOrb.setState(OrbView.STATE_EXECUTING, 0xFFFFC629);
+                    append(step, KIND_STEP);
+                });
             }
 
             @Override
             public void onAnswer(String answer) {
                 writeResponseFile(answer, null);
                 post(() -> {
+                    if (appOrb != null) appOrb.setState(OrbView.STATE_ANSWERING, 0xFF10B981);
                     append(answer, KIND_AGENT);
                     speak(answer);
                     finishTask();
@@ -208,6 +217,7 @@ public final class AgentActivity extends Activity implements VoiceServer.Bridge 
             public void onError(String message) {
                 writeResponseFile(null, message);
                 post(() -> {
+                    if (appOrb != null) appOrb.setState(OrbView.STATE_ERROR, 0xFFFF5252);
                     append(getString(R.string.error, message), KIND_ERROR);
                     finishTask();
                     if (phone != null) phone.finish(null);
@@ -233,21 +243,24 @@ public final class AgentActivity extends Activity implements VoiceServer.Bridge 
     }
 
     private void writeResponseFile(String text, String error) {
-        try {
-            java.io.File file = new java.io.File("/data/local/tmp/zenith_response.txt");
-            if (text == null && error == null) {
-                file.delete();
-                return;
+        String content = error != null ? ("ERROR:" + error + "\n") : (text != null ? ("ANSWER:" + text + "\n") : "");
+        String[] paths = new String[] {
+            "/data/local/tmp/zenith_response.txt",
+            "/sdcard/zenith_response.txt"
+        };
+        for (String path : paths) {
+            try {
+                java.io.File file = new java.io.File(path);
+                if (content.isEmpty()) {
+                    if (file.exists()) file.delete();
+                    continue;
+                }
+                java.io.FileWriter writer = new java.io.FileWriter(file);
+                writer.write(content);
+                writer.close();
+                file.setReadable(true, false);
+            } catch (Exception ignored) {
             }
-            java.io.FileWriter writer = new java.io.FileWriter(file);
-            if (error != null) {
-                writer.write("ERROR:" + error + "\n");
-            } else {
-                writer.write("ANSWER:" + text + "\n");
-            }
-            writer.close();
-            file.setReadable(true, false);
-        } catch (Exception ignored) {
         }
     }
 
