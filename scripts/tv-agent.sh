@@ -43,6 +43,11 @@ Natural Language & AI Tasks:
   $cmd "Launch MACL Services flight board"
 
 Direct TV Quick Controls:
+  $cmd --home                     Return to TV Home screen immediately
+  $cmd --close "<app_name>"       Close an app and return home
+  $cmd --input [hdmi1|hdmi2|...]  Switch TV input source (hdmi1, hdmi2, hdmi3, av, tv, menu)
+  $cmd --key [up|down|ok|back...] Send TV remote D-pad / navigation key
+  $cmd --power [sleep|wake]       Control TV display power state
   $cmd --say "Your message"       Speak aloud on the TV (TTS)
   $cmd --volume <0-100>           Set volume level
   $cmd --open "<app_name>"        Launch any TV app by name
@@ -166,7 +171,7 @@ run_repl() {
     echo "║       Connected Target: $ADB_TARGET                        ║"
     echo "║       Optimized for tmux terminal panes & SSH remote sessions     ║"
     echo "╚═══════════════════════════════════════════════════════════════════╝"
-    echo "Commands: /status, /notch [start|stop], /vol <0-100>, /say <msg>, /help, exit"
+    echo "Commands: /home, /close <app>, /input <src>, /vol <0-100>, /say <msg>, /status, exit"
     echo "Type any goal or natural language task below."
     echo ""
 
@@ -180,6 +185,25 @@ run_repl() {
                 ;;
             /help)
                 show_help
+                ;;
+            /home)
+                "$SCRIPT_DIR/tv-agent.sh" --home
+                ;;
+            /close*)
+                arg="${input#* }"
+                "$SCRIPT_DIR/tv-agent.sh" --close "$arg"
+                ;;
+            /input*)
+                arg="${input#* }"
+                "$SCRIPT_DIR/tv-agent.sh" --input "$arg"
+                ;;
+            /power*)
+                arg="${input#* }"
+                "$SCRIPT_DIR/tv-agent.sh" --power "$arg"
+                ;;
+            /key*)
+                arg="${input#* }"
+                "$SCRIPT_DIR/tv-agent.sh" --key "$arg"
                 ;;
             /status)
                 ensure_connected
@@ -234,6 +258,55 @@ case "$1" in
     --help|-h)
         show_help
         exit 0
+        ;;
+    --home)
+        ensure_connected
+        "$ADB" -s "$ADB_TARGET" shell am start -a android.intent.action.MAIN -c android.intent.category.HOME >/dev/null 2>&1
+        echo "✓ Returned to TV Home."
+        ;;
+    --close)
+        ensure_connected
+        TARGET="${2:-}"
+        if [ -z "$TARGET" ]; then
+            echo "Error: --close requires an app name." >&2
+            exit 1
+        fi
+        dispatch_prompt "close $TARGET"
+        ;;
+    --input)
+        ensure_connected
+        SRC="${2:-menu}"
+        dispatch_prompt "switch input to $SRC"
+        ;;
+    --power)
+        ensure_connected
+        ACT="${2:-sleep}"
+        if [ "$ACT" = "wake" ]; then
+            "$ADB" -s "$ADB_TARGET" shell input keyevent KEYCODE_WAKEUP >/dev/null 2>&1
+            echo "✓ TV screen woke up."
+        else
+            dispatch_prompt "put TV into sleep mode"
+        fi
+        ;;
+    --key)
+        ensure_connected
+        KEY="${2:-}"
+        case "$KEY" in
+            up) CODE=19 ;;
+            down) CODE=20 ;;
+            left) CODE=21 ;;
+            right) CODE=22 ;;
+            select|enter|ok) CODE=23 ;;
+            back) CODE=4 ;;
+            home) CODE=3 ;;
+            menu) CODE=82 ;;
+            volup) CODE=24 ;;
+            voldn) CODE=25 ;;
+            mute) CODE=164 ;;
+            *) echo "Unknown key: $KEY"; exit 1 ;;
+        esac
+        "$ADB" -s "$ADB_TARGET" shell input keyevent "$CODE" >/dev/null 2>&1
+        echo "✓ Sent remote key $KEY ($CODE)."
         ;;
     --say)
         ensure_connected

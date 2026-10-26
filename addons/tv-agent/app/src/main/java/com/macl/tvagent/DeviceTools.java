@@ -79,6 +79,10 @@ public final class DeviceTools implements Toolbox {
                     return goHome();
                 case ToolSpecs.MUTE:
                     return mute(args.optString("action"));
+                case ToolSpecs.SWITCH_INPUT:
+                    return switchInput(args.optString("source"));
+                case ToolSpecs.TV_POWER:
+                    return tvPower(args.optString("action"));
                 default:
                     return "error: unknown tool " + name;
             }
@@ -225,6 +229,74 @@ public final class DeviceTools implements Toolbox {
         } else {
             audio.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_TOGGLE_MUTE, 0);
             return "TV mute toggled";
+        }
+    }
+
+    private String switchInput(String source) {
+        String src = source == null ? "menu" : source.trim().toLowerCase(Locale.ROOT);
+        String inputId = null;
+        switch (src) {
+            case "hdmi_1":
+            case "hdmi1":
+                inputId = "com.hisense.tv.hitvinput/.hdmi.HdmiTvInputService/HW4";
+                break;
+            case "hdmi_2":
+            case "hdmi2":
+                inputId = "com.hisense.tv.hitvinput/.hdmi.HdmiTvInputService/HW5";
+                break;
+            case "hdmi_3":
+            case "hdmi3":
+                inputId = "com.hisense.tv.hitvinput/.hdmi.HdmiTvInputService/HW6";
+                break;
+            case "av":
+            case "composite":
+                inputId = "com.hisense.tv.hitvinput/.composite.CompositeTvInputService/HW1";
+                break;
+            case "tv":
+            case "tuner":
+            case "antenna":
+                inputId = "com.hisense.tv.hitvinput/.tuner.TunerTvInputService/HW0";
+                break;
+            case "menu":
+            default:
+                try {
+                    Intent menu = new Intent();
+                    menu.setClassName("com.vt.tv.input", "com.vt.tv.input.view.activity.MainActivity");
+                    menu.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    ctx.startActivity(menu);
+                    return "opened the TV input source menu";
+                } catch (ActivityNotFoundException e) {
+                    return "error: could not open TV input menu";
+                }
+        }
+
+        try {
+            Intent viewInput = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("content://android.media.tv/passthrough/" + Uri.encode(inputId)));
+            viewInput.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(viewInput);
+            sleep(400);
+            return "switched TV input to " + src.replace('_', ' ').toUpperCase(Locale.ROOT);
+        } catch (ActivityNotFoundException e) {
+            Intent menu = new Intent();
+            menu.setClassName("com.vt.tv.input", "com.vt.tv.input.view.activity.MainActivity");
+            menu.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(menu);
+            return "opened TV input menu for " + src;
+        }
+    }
+
+    private String tvPower(String action) {
+        String act = action == null ? "sleep" : action.trim().toLowerCase(Locale.ROOT);
+        try {
+            Intent dream = new Intent();
+            dream.setClassName("com.google.android.apps.tv.dreamx", "android.service.dreams.DreamActivity");
+            dream.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(dream);
+            return "TV display is now in " + act + " mode";
+        } catch (ActivityNotFoundException e) {
+            goHome();
+            return "returned to Home screen";
         }
     }
 

@@ -18,6 +18,8 @@ public final class ToolSpecs {
     public static final String CLOSE_APP = "close_app";
     public static final String GO_HOME = "go_home";
     public static final String MUTE = "mute";
+    public static final String SWITCH_INPUT = "switch_input";
+    public static final String TV_POWER = "tv_power";
 
     private ToolSpecs() {
     }
@@ -85,6 +87,16 @@ public final class ToolSpecs {
                     props(named("action", enumOf("Action to take.",
                             "toggle", "mute", "unmute"))),
                     "action"));
+            out.put(function(SWITCH_INPUT,
+                    "Switch TV input source (HDMI 1, HDMI 2, HDMI 3, AV, TV) or open the source selection menu.",
+                    props(named("source", enumOf("The input source to switch to.",
+                            "hdmi_1", "hdmi_2", "hdmi_3", "av", "tv", "menu"))),
+                    "source"));
+            out.put(function(TV_POWER,
+                    "Control the TV screen state: sleep, standby, or screensaver.",
+                    props(named("action", enumOf("Power action to take.",
+                            "sleep", "standby", "screensaver"))),
+                    "action"));
             return out;
         } catch (JSONException e) {
             throw new IllegalStateException("tool declarations", e);
@@ -106,6 +118,8 @@ public final class ToolSpecs {
             case CLOSE_APP:
             case GO_HOME:
             case MUTE:
+            case SWITCH_INPUT:
+            case TV_POWER:
                 return true;
             default:
                 return false;
