@@ -195,6 +195,7 @@ public final class AgentActivity extends Activity implements VoiceServer.Bridge 
 
             @Override
             public void onAnswer(String answer) {
+                writeResponseFile(answer, null);
                 post(() -> {
                     append(answer, KIND_AGENT);
                     speak(answer);
@@ -205,6 +206,7 @@ public final class AgentActivity extends Activity implements VoiceServer.Bridge 
 
             @Override
             public void onError(String message) {
+                writeResponseFile(null, message);
                 post(() -> {
                     append(getString(R.string.error, message), KIND_ERROR);
                     finishTask();
@@ -215,9 +217,11 @@ public final class AgentActivity extends Activity implements VoiceServer.Bridge 
 
         work.execute(() -> {
             try {
+                writeResponseFile(null, null);
                 engine.run(text, listener);
             } catch (RuntimeException e) {
                 String message = e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
+                writeResponseFile(null, message);
                 listener.onError(message);
             }
         });
@@ -226,6 +230,25 @@ public final class AgentActivity extends Activity implements VoiceServer.Bridge 
     private void finishTask() {
         busy.set(false);
         setWorking(false);
+    }
+
+    private void writeResponseFile(String text, String error) {
+        try {
+            java.io.File file = new java.io.File("/data/local/tmp/zenith_response.txt");
+            if (text == null && error == null) {
+                file.delete();
+                return;
+            }
+            java.io.FileWriter writer = new java.io.FileWriter(file);
+            if (error != null) {
+                writer.write("ERROR:" + error + "\n");
+            } else {
+                writer.write("ANSWER:" + text + "\n");
+            }
+            writer.close();
+            file.setReadable(true, false);
+        } catch (Exception ignored) {
+        }
     }
 
     private void setWorking(boolean working) {

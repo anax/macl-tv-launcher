@@ -6,45 +6,231 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TV_HOST="${TV_HOST:-100.83.39.24}"
+TV_HOST="${TV_HOST:-${ZENITH_HOST:-}}"
+if [ -z "$TV_HOST" ]; then
+    if [ -n "$(getprop ro.product.model 2>/dev/null)" ] || [ -f "/system/build.prop" ]; then
+        TV_HOST="127.0.0.1"
+    else
+        TV_HOST="100.83.39.24"
+    fi
+fi
 ADB="adb"
 if ! command -v adb >/dev/null 2>&1; then
     if [ -x "$HOME/Library/Android/sdk/platform-tools/adb" ]; then
         ADB="$HOME/Library/Android/sdk/platform-tools/adb"
+    elif [ -n "${PREFIX:-}" ] && [ -x "$PREFIX/bin/adb" ]; then
+        ADB="$PREFIX/bin/adb"
+    elif [ -x "$HOME/.local/bin/adb" ]; then
+        ADB="$HOME/.local/bin/adb"
     fi
 fi
 ADB_TARGET="$TV_HOST:5555"
 
 show_help() {
+    local cmd="zenith"
     cat <<EOF
-Usage: ./scripts/tv-agent.sh [COMMAND | OPTIONS]
+Usage: $cmd [COMMAND | OPTIONS]
+
+Type '$cmd' with no arguments to start an interactive chat session.
+
+Interactive Mode:
+  $cmd                             Start interactive chat session (ideal for Termux & tmux)
+  $cmd --install                   Install 'zenith' to your PATH (\$PREFIX/bin or ~/.local/bin)
 
 Natural Language & AI Tasks:
-  ./scripts/tv-agent.sh "Open YouTube and play aviation landing videos"
-  ./scripts/tv-agent.sh "Set volume to 40 and check prayer time"
-  ./scripts/tv-agent.sh "Launch MACL Services flight board"
+  $cmd "Open YouTube and play aviation landing videos"
+  $cmd "Set volume to 40 and check prayer time"
+  $cmd "Launch MACL Services flight board"
 
 Direct TV Quick Controls:
-  ./scripts/tv-agent.sh --say "Your message"       Speak aloud on the TV (TTS)
-  ./scripts/tv-agent.sh --volume <0-100>           Set volume level
-  ./scripts/tv-agent.sh --open "<app_name>"        Launch any TV app by name
-  ./scripts/tv-agent.sh --youtube "<search_query>" Search & open YouTube
-  ./scripts/tv-agent.sh --media [play|pause|next]  Control current media playback
-  ./scripts/tv-agent.sh --orb [start|stop]         Start or stop the floating orb
-  ./scripts/tv-agent.sh --status                   Check TV Agent and active screen
+  $cmd --say "Your message"       Speak aloud on the TV (TTS)
+  $cmd --volume <0-100>           Set volume level
+  $cmd --open "<app_name>"        Launch any TV app by name
+  $cmd --youtube "<search_query>" Search & open YouTube
+  $cmd --media [play|pause|next]  Control current media playback
+  $cmd --orb [start|stop]         Start or stop the floating notch HUD
+  $cmd --status                   Check TV Agent and active screen
 EOF
 }
 
-if [ $# -eq 0 ]; then
-    show_help
+install_cli() {
+    local target_bin=""
+    if [ -n "${PREFIX:-}" ] && [ -d "$PREFIX/bin" ]; then
+        target_bin="$PREFIX/bin/zenith"
+    elif [ -w "/usr/local/bin" ]; then
+        target_bin="/usr/local/bin/zenith"
+    elif [ -d "$HOME/.local/bin" ]; then
+        target_bin="$HOME/.local/bin/zenith"
+    else
+        mkdir -p "$HOME/.local/bin"
+        target_bin="$HOME/.local/bin/zenith"
+    fi
+
+    ln -sf "$SCRIPT_DIR/tv-agent.sh" "$target_bin"
+    chmod +x "$target_bin"
+    echo "✓ Zenith successfully installed to: $target_bin"
+    echo ""
+    echo "Now you can simply type:"
+    echo "  zenith"
+    echo "from Termux or any terminal to launch your chat session!"
+    if [ "$target_bin" = "$HOME/.local/bin/zenith" ]; then
+        case ":$PATH:" in
+            *:"$HOME/.local/bin":*) ;;
+            *) echo "💡 Add '$HOME/.local/bin' to your PATH: export PATH=\"\$HOME/.local/bin:\$PATH\"" ;;
+        esac
+    fi
     exit 0
-fi
+}
 
 ensure_connected() {
+    if ! command -v "$ADB" >/dev/null 2>&1; then
+        echo "⚠️  'adb' command not found." >&2
+        if [ -n "${PREFIX:-}" ]; then
+            echo "👉 In Termux, install android-tools with:  pkg install android-tools" >&2
+        else
+            echo "👉 Please install Android platform tools (adb)." >&2
+        fi
+        exit 1
+    fi
     "$ADB" connect "$ADB_TARGET" >/dev/null 2>&1 || true
 }
 
+dispatch_prompt() {
+    local text="$1"
+    local target_host="$TV_HOST"
+    if [ -n "$(getprop ro.product.model 2>/dev/null)" ] || [ -f "/system/build.prop" ]; then
+        target_host="127.0.0.1"
+    fi
+
+    # 1. Direct HTTP Bridge (VoiceServer) if reachable
+    if command -v curl >/dev/null 2>&1; then
+        if curl -s -m 2 "http://$target_host:8787/state" >/dev/null 2>&1; then
+            echo "🧠 Thinking..."
+            local resp
+            resp=$(curl -s -X POST "http://$target_host:8787/ask" --data-urlencode "text=$text" 2>/dev/null || true)
+            if [ -n "$resp" ]; then
+                local ans
+                ans=$(printf '%s' "$resp" | sed -n 's/.*"answer":"\([^"]*\)".*/\1/p' | sed 's/\\n/\n/g' | sed 's/\\"/"/g' || true)
+                if [ -n "$ans" ]; then
+                    echo ""
+                    echo "🛰️ Zenith: $ans"
+                    return 0
+                fi
+                local err
+                err=$(printf '%s' "$resp" | sed -n 's/.*"error":"\([^"]*\)".*/\1/p' || true)
+                if [ -n "$err" ]; then
+                    echo "⚠️ $err"
+                    return 1
+                fi
+            fi
+        fi
+    fi
+
+    # 2. ADB Bridge Fallback with Response Listener
+    "$ADB" -s "$ADB_TARGET" shell rm -f /data/local/tmp/zenith_response.txt >/dev/null 2>&1 || true
+
+    if "$ADB" -s "$ADB_TARGET" shell dumpsys activity services com.macl.tvagent/.OrbService 2>/dev/null | grep -q "ServiceRecord"; then
+        "$ADB" -s "$ADB_TARGET" shell am startforegroundservice -n com.macl.tvagent/.OrbService --es prompt "$text" >/dev/null 2>&1
+    else
+        "$ADB" -s "$ADB_TARGET" shell am start -n com.macl.tvagent/.AgentActivity --es prompt "$text" >/dev/null 2>&1
+    fi
+
+    echo "🧠 Thinking..."
+    local elapsed=0
+    while [ $elapsed -lt 60 ]; do
+        sleep 0.5
+        local res
+        res=$("$ADB" -s "$ADB_TARGET" shell cat /data/local/tmp/zenith_response.txt 2>/dev/null | tr -d '\r' || true)
+        if [ -n "$res" ]; then
+            if [[ "$res" == ANSWER:* ]]; then
+                echo ""
+                echo "🛰️ Zenith: ${res#ANSWER:}"
+                return 0
+            elif [[ "$res" == ERROR:* ]]; then
+                echo ""
+                echo "⚠️ Zenith: ${res#ERROR:}"
+                return 1
+            fi
+        fi
+        elapsed=$((elapsed + 1))
+    done
+
+    echo "✓ Task sent to TV (see TV screen for status)."
+}
+
+run_repl() {
+    ensure_connected
+    echo ""
+    echo "╔═══════════════════════════════════════════════════════════════════╗"
+    echo "║               🛰️  ZENITH // AMBIENT TV AGENT REPL                ║"
+    echo "║       Connected Target: $ADB_TARGET                        ║"
+    echo "║       Optimized for tmux terminal panes & SSH remote sessions     ║"
+    echo "╚═══════════════════════════════════════════════════════════════════╝"
+    echo "Commands: /status, /notch [start|stop], /vol <0-100>, /say <msg>, /help, exit"
+    echo "Type any goal or natural language task below."
+    echo ""
+
+    while true; do
+        read -r -p "zenith ❯ " input || break
+        [ -z "$input" ] && continue
+        case "$input" in
+            exit|quit|q|:q)
+                echo "Exiting TV Agent session."
+                break
+                ;;
+            /help)
+                show_help
+                ;;
+            /status)
+                ensure_connected
+                echo "=== TV Agent Status ==="
+                echo "Target: $ADB_TARGET"
+                FOCUSED=$("$ADB" -s "$ADB_TARGET" shell "dumpsys window | grep -E 'mCurrentFocus'" 2>/dev/null | tr -d '\r')
+                echo "Active Window: $FOCUSED"
+                ;;
+            /notch*|/orb*)
+                arg="${input#* }"
+                [ "$arg" = "$input" ] && arg="start"
+                if [ "$arg" = "start" ]; then
+                    echo "🔮 Starting floating ambient notch HUD..."
+                    "$ADB" -s "$ADB_TARGET" shell am startforegroundservice -n com.macl.tvagent/.OrbService >/dev/null 2>&1
+                    echo "✓ Ambient notch active."
+                else
+                    echo "Hiding floating notch HUD..."
+                    "$ADB" -s "$ADB_TARGET" shell am stopservice com.macl.tvagent/.OrbService >/dev/null 2>&1
+                    echo "✓ Ambient notch stopped."
+                fi
+                ;;
+            /vol*)
+                level="${input#* }"
+                echo "🔊 Setting volume to $level%..."
+                "$ADB" -s "$ADB_TARGET" shell am start -n com.macl.tvagent/.AgentActivity --es prompt "Set volume to $level" >/dev/null 2>&1
+                ;;
+            /say*)
+                msg="${input#* }"
+                echo "🗣️ Speaking: \"$msg\"..."
+                "$ADB" -s "$ADB_TARGET" shell am start -n com.macl.tvagent/.AgentActivity --es prompt "Speak using tool say: $msg" >/dev/null 2>&1
+                ;;
+            *)
+                dispatch_prompt "$input"
+                ;;
+        esac
+        echo ""
+    done
+}
+
+if [ $# -eq 0 ]; then
+    run_repl
+    exit 0
+fi
+
 case "$1" in
+    --install|install)
+        install_cli
+        ;;
+    --repl|-i|repl|chat)
+        run_repl
+        ;;
     --help|-h)
         show_help
         exit 0
@@ -128,9 +314,6 @@ case "$1" in
         ;;
     *)
         ensure_connected
-        PROMPT="$*"
-        echo "🤖 Sending task to TV Agent: \"$PROMPT\""
-        "$ADB" -s "$ADB_TARGET" shell am start -n com.macl.tvagent/.AgentActivity --es prompt "$PROMPT" >/dev/null 2>&1
-        echo "✓ Prompt dispatched to TV. Agent is executing task."
+        dispatch_prompt "$*"
         ;;
 esac

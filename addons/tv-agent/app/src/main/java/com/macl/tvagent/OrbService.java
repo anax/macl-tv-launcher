@@ -357,21 +357,39 @@ public final class OrbService extends Service {
                     answer[0] = text;
                     setNotchState("✓ " + text, 0xFF10B981);
                     speak(text);
+                    writeResponseFile(text, null);
                     main.postDelayed(() -> setNotchState("Ready", 0xFF00B2E3), 6000);
                 }
 
                 @Override
                 public void onError(String message) {
                     setNotchState("✗ " + message, 0xFFFF5252);
+                    writeResponseFile(null, message);
                     main.postDelayed(() -> setNotchState("Ready", 0xFF00B2E3), 6000);
                 }
             });
             return answer[0];
         } catch (RuntimeException e) {
             setNotchState("✗ " + message(e), 0xFFFF5252);
+            writeResponseFile(null, message(e));
             return null;
         } finally {
             BUSY.set(false);
+        }
+    }
+
+    private void writeResponseFile(String text, String error) {
+        try {
+            java.io.File file = new java.io.File("/data/local/tmp/zenith_response.txt");
+            java.io.FileWriter writer = new java.io.FileWriter(file);
+            if (error != null) {
+                writer.write("ERROR:" + error + "\n");
+            } else if (text != null) {
+                writer.write("ANSWER:" + text + "\n");
+            }
+            writer.close();
+            file.setReadable(true, false);
+        } catch (Exception ignored) {
         }
     }
 

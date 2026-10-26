@@ -60,10 +60,10 @@
             <meta-data android:name="com.gathin.tvhome.card" android:resource="@xml/module_card" />
         </activity>
 
-        <!-- The floating circle: overlay plus the phone page, alive until hidden. Not exported. -->
+        <!-- The floating circle / ambient notch HUD: overlay plus the phone page, alive until hidden. Exported for terminal control. -->
         <service
             android:name=".OrbService"
-            android:exported="false"
+            android:exported="true"
             android:foregroundServiceType="specialUse">
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
